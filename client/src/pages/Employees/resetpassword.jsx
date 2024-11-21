@@ -41,7 +41,7 @@ export const ResetPassword = () => {
     useEffect(() => {
         if (employeestate.isResetPasswords) {
             loadingbar.current.complete()
-            navigate("/")
+            navigate("/auth/employee/login")
         }
     }, [employeestate.isResetPasswords])
 

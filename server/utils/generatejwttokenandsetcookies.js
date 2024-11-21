@@ -1,13 +1,26 @@
 import jwt from 'jsonwebtoken'
 
-export const GenerateJwtTokenAndSetCookies  = (res, employeeid, role) =>{
-    const token = jwt.sign({ employeeid, role }, process.env.JWT_SECRET, { expiresIn: '7d' })
+export const GenerateJwtTokenAndSetCookiesEmployee = (res, EMid, EMrole) => {
+    const token = jwt.sign({ EMid, EMrole }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
-    res.cookie("token", token, {
-        maxAge : 7 * 24 * 60 * 60 * 1000,
+    res.cookie("EMtoken", token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
-        sameSite: "none", 
+        sameSite: "none",
+    })
+
+    return token
+}
+
+export const GenerateJwtTokenAndSetCookiesHR = (res, HRid, HRrole) => {
+    const token = jwt.sign({ HRid, HRrole }, process.env.JWT_SECRET, { expiresIn: '7d' })
+
+    res.cookie("HRtoken", token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
     })
 
     return token

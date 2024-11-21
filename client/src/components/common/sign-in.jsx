@@ -44,7 +44,7 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, submiteven
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <Link to={"/forgot-password"}>
+                                    <Link to={"/auth/employee/forgot-password"}>
                                         <a className="font-semibold text-indigo-600 hover:text-indigo-500">
                                             Forgot password?
                                         </a>

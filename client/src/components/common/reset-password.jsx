@@ -2,8 +2,6 @@ import { Link } from "react-router-dom"
 import { ErrorPopup } from "./error-popup"
 import { useSelector } from "react-redux"
 export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passworderror }) => {
-    console.log("password error", passworderror)
-
     const employeestate = useSelector((state) => state.employeereducer)
     return (
         <>
@@ -13,16 +11,15 @@ export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passw
 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
                     <img
-                        alt="Your Company"
-                        src="../../src/assets/resetpassword.png"
+                        alt="Your Company" src="../../src/assets/resetpassword.png"
                         className="mx-auto h-auto w-auto"
                     />
+                    <img src="../../src/assets/welcome.png" alt="" />
                 </div>
                 <div className="my-5 sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
                     <h2 className="mb-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                         Enter Your New Password
                     </h2>
-                    {/*  */}
                     <form className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">

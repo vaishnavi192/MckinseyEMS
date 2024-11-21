@@ -30,7 +30,7 @@ export const ForgotPassword = () => {
     useEffect(() => {
         if (EmplyoeeState.data) {
             loadingbar.current.complete()
-            navigate("/reset-email-confirmation")
+            navigate("/auth/employee/reset-email-confirmation")
         }
     }, [EmplyoeeState.data])
 

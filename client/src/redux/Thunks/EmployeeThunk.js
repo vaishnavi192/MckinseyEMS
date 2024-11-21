@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { apiService } from '../apis/apiService'
-import APIsEndPoints from '../apis/APIsEndpoints.js'
+import { APIsEndPoints } from '../apis/APIsEndpoints.js'
 
 
 export const HandleGetEmployees = createAsyncThunk("handleGetEmployees", async (EmployeeData, { rejectWithValue }) => {
     try {
         const { apiroute } = EmployeeData
-        const response = await apiService.get(`${APIsEndPoints[apiroute]}`, {
+        const response = await apiService.get(`${APIsEndPoints[apiroute]}`, { 
             withCredentials: true
         })
         return response.data

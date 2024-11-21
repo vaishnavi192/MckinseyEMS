@@ -2,7 +2,7 @@ import { Employee } from "../models/Employee.model.js"
 import bcrypt from 'bcrypt'
 import { GenerateVerificationToken } from "../utils/generateverificationtoken.js"
 import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mailtrap/emails.js"
-import { GenerateJwtTokenAndSetCookies } from "../utils/generatejwttokenandsetcookies.js"
+import { GenerateJwtTokenAndSetCookiesEmployee } from "../utils/generatejwttokenandsetcookies.js"
 import crypto from "crypto"
 
 
@@ -22,7 +22,7 @@ export const HandleEmplyoeeSignup = async (req, res) => {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10)
-            const verificationcode = GenerateVerificationToken(6)
+            const verificationcode = GenerateVerificationToken(6) 
 
             const newEmployee = await Employee.create({
                 firstname: firstname,
@@ -34,7 +34,7 @@ export const HandleEmplyoeeSignup = async (req, res) => {
                 verificationtoken: verificationcode,
                 verificationtokenexpires: Date.now() + 5 * 60 * 1000
             })
-            GenerateJwtTokenAndSetCookies(res, newEmployee._id, newEmployee.role)
+            GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role)
             const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
             return res.status(201).json({ success: true, message: "Employee Registered Successfully", SendVerificationEmailStatus: VerificationEmailStatus, newEmployee: newEmployee })
 
@@ -75,7 +75,7 @@ export const HandleResetEmplyoeeVerifyEmail = async (req, res) => {
     const { email } = req.body
 
     try {
-        const employee = await Employee.findOne({ email: email })
+        const employee = await Employee.findOne({ email: email }) 
 
         if (!employee.email) {
             return res.status(404).json({ success: false, message: "Employee Email Does Not Exist, Please Enter Valid Email Address" })
@@ -114,7 +114,7 @@ export const HandleEmplyoeeLogin = async (req, res) => {
             return res.status(404).json({ success: false, message: "Invalid Credentials, Please Enter Correct One" })
         }
 
-        GenerateJwtTokenAndSetCookies(res, employee._id, employee.role)
+        GenerateJwtTokenAndSetCookiesEmployee(res, employee._id, employee.role)
         employee.lastlogin = new Date()
         await employee.save()
         return res.status(200).json({ success: true, message: "Emplyoee Login Successfull" })
@@ -127,7 +127,7 @@ export const HandleEmplyoeeLogin = async (req, res) => {
 
 export const HandleEmployeeCheck = async (req, res) => {
     try {
-        const employee = await Employee.findById(req.employeeid)
+        const employee = await Employee.findById(req.EMid)
         if (!employee) {
             return res.status(404).json({ success: false, message: "Employee not found" })
         }
@@ -163,7 +163,7 @@ export const HandleEmplyoeeForgotPassword = async (req, res) => {
         employee.resetpasswordexpires = resetTokenExpires;
         await employee.save()
 
-        const URL = `${process.env.CLIENT_URL}/resetpassword/${resetToken}`
+        const URL = `${process.env.CLIENT_URL}/auth/employee/resetpassword/${resetToken}`
         const SendForgotPasswordEmailStatus = await SendForgotPasswordEmail(email, URL)
         return res.status(200).json({ success: true, message: "Reset Password Email Sent Successfully", SendForgotPasswordEmailStatus: SendForgotPasswordEmailStatus })
 

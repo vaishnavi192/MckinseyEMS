@@ -4,28 +4,31 @@ import { ProtectedRoutes } from "./protectedroutes.jsx"
 import { ForgotPassword } from "../pages/Employees/forgotpassword.jsx"
 import { ResetEmailConfirm } from "../pages/Employees/resetemailconfirm.jsx"
 import { ResetPassword } from "../pages/Employees/resetpassword.jsx"
-import { useState } from "react"
-import { Example } from "../hooks/example.jsx"
+import { EntryPage } from "../pages/Employees/EntryPage.jsx"
 
 export const EmployeeRoutes = [
     {
         path: "/",
+        element: <EntryPage />
+    },
+    {
+        path: "/auth/employee/login",
         element: <EmployeeLogin />
     },
     {
-        path: "/employee-dashboard",
+        path: "/auth/employee/employee-dashboard",
         element: <ProtectedRoutes> <EmployeeDashboard /> </ProtectedRoutes>
     },
     {
-        path: "/forgot-password",
+        path: "/auth/employee/forgot-password",
         element: <ForgotPassword />
     },
     {
-        path: "/reset-email-confirmation",
+        path: "/auth/employee/reset-email-confirmation",
         element: <ResetEmailConfirm />
     },
     {
-        path: "/resetpassword/:token",
+        path: "/auth/employee/resetpassword/:token",
         element: <ResetPassword />
     },
 ]
