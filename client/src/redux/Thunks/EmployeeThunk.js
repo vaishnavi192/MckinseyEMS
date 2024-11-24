@@ -10,7 +10,7 @@ export const HandleGetEmployees = createAsyncThunk("handleGetEmployees", async (
             withCredentials: true
         })
         return response.data
-    } catch (error) {
+    } catch (error) { 
         return rejectWithValue(error.response.data);
     }
 })
@@ -19,8 +19,6 @@ export const HandlePostEmployees = createAsyncThunk("HandlePostEmployees", async
     try {
         const { apiroute, data, type } = EmployeeData
         if (type == "resetpassword") {
-            console.log(EmployeeData)
-            console.log(APIsEndPoints.RESET_PASSWORD(apiroute))
             const response = await apiService.post(`${APIsEndPoints.RESET_PASSWORD(apiroute)}`, data, {
                 withCredentials: true
             })

@@ -2,7 +2,7 @@ import { Employee } from "../models/Employee.model.js"
 import bcrypt from 'bcrypt'
 import { GenerateVerificationToken } from "../utils/generateverificationtoken.js"
 import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mailtrap/emails.js"
-import { GenerateJwtTokenAndSetCookiesEmployee } from "../utils/generatejwttokenandsetcookies.js"
+import { GenerateJwtTokenAndSetCookiesEmployee } from "../utils/generatejwttokenandsetcookies.js" 
 import crypto from "crypto"
 
 
@@ -36,7 +36,7 @@ export const HandleEmplyoeeSignup = async (req, res) => {
             })
             GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role)
             const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
-            return res.status(201).json({ success: true, message: "Employee Registered Successfully", SendVerificationEmailStatus: VerificationEmailStatus, newEmployee: newEmployee })
+            return res.status(201).json({ success: true, message: "Employee Registered Successfully", SendVerificationEmailStatus: VerificationEmailStatus, newEmployee: newEmployee.email })
 
         } catch (error) {
             res.status(400).json({ success: false, message: "Oops! Something went wrong", error: error });

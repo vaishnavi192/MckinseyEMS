@@ -26,7 +26,7 @@ export const ResetPassword = () => {
         }
         else {
             e.preventDefault();
-            setpassworderror(true)
+            setpassworderror(true) 
         }
     }
 
@@ -49,7 +49,7 @@ export const ResetPassword = () => {
         <div className="reset-password-container">
             <LoadingBar ref={loadingbar} />
             <div className="reset-password-content flex justify-center items-center h-[100vh]">
-                <Reset_Password handlepasswordsubmit={handlepasswordsubmit} handlepasswordform={handlepasswordform} passworderror={passworderror} />
+                <Reset_Password handlepasswordsubmit={handlepasswordsubmit} handlepasswordform={handlepasswordform} passworderror={passworderror} targetstate={employeestate}/>
             </div>
         </div>
     )

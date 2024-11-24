@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom"
 import { ErrorPopup } from "./error-popup"
 import { useSelector } from "react-redux"
-export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passworderror }) => {
-    const employeestate = useSelector((state) => state.employeereducer)
+export const Reset_Password = ({ handlepasswordsubmit, handlepasswordform, passworderror, targetstate }) => { 
     return (
         <>
-            {employeestate.error.status ? <ErrorPopup error={employeestate.error.message} /> : null}
+            {targetstate.error.status ? <ErrorPopup error={targetstate.error.message} /> : null}
             {passworderror ? <ErrorPopup error={"Password Does Not Match, Please Try Again"} /> : null}
             <div className="flex min-h-full flex-1 min-[200px]:flex-col md:flex-row md:items-center justify-center px-6 py-12 lg:px-8 md:gap-5">
 

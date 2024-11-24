@@ -1,5 +1,5 @@
 import express from 'express'
-import { HandleEmplyoeeSignup, HandleEmplyoeeVerifyEmail, HandleEmplyoeeLogout, HandleEmplyoeeLogin, HandleEmplyoeeForgotPassword, HandleEmplyoeeSetPassword, HandleResetEmplyoeeVerifyEmail, HandleEmployeeCheck } from '../controllers/Emplyoee.controller.js'
+import { HandleEmplyoeeSignup, HandleEmplyoeeVerifyEmail, HandleEmplyoeeLogout, HandleEmplyoeeLogin, HandleEmplyoeeForgotPassword, HandleEmplyoeeSetPassword, HandleResetEmplyoeeVerifyEmail, HandleEmployeeCheck } from '../controllers/EmplyoeeAuth.controller.js'
 import { VerifyEmployeeToken } from '../middlewares/Auth.middleware.js'
 
 const router = express.Router()

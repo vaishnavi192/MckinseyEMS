@@ -1,8 +1,8 @@
-import { ResetEmailConfirmaction } from "../../components/common/reset-email-confirm"
-export const ResetEmailConfirm = () => {
+import { ResetEmailConfirmaction } from "../../components/common/reset-email-confirm.jsx"
+export const ResetEmailConfirm = () => { 
     return (
         <>
-            <ResetEmailConfirmaction />
+            <ResetEmailConfirmaction redirectpath={"/auth/employee/login"} />
         </>
     )
 }

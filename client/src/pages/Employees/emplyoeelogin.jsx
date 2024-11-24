@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { HandlePostEmployees, HandleGetEmployees } from "../../redux/Thunks/EmployeeThunk.js"
 import LoadingBar from 'react-top-loading-bar'
 import { useNavigate } from 'react-router-dom'
+import { CommonStateHandler } from "../../utils/commonhandler.js"
 
 export const EmployeeLogin = () => {
 
@@ -16,14 +17,14 @@ export const EmployeeLogin = () => {
         password: "",
     })
 
-    const handlesigninform = (e) => {
-        set_signinform({ ...signinform, [e.target.name]: e.target.value })
+    const handlesigninform = (event) => {
+        CommonStateHandler(signinform, set_signinform, event)
     }
 
     const handlesigninsubmit = async (e) => {
         e.preventDefault();
         loadingbar.current.continuousStart();
-        dispatch(HandlePostEmployees({ apiroute: "LOGIN", data: signinform })) 
+        dispatch(HandlePostEmployees({ apiroute: "LOGIN", data: signinform }))
     }
 
 
@@ -50,7 +51,7 @@ export const EmployeeLogin = () => {
         <div className="employee-login-container">
             <LoadingBar ref={loadingbar} />
             <div className="employee-login-content flex justify-center items-center h-[100vh]">
-                <SignIn image={"../../src/assets/Employee-Welcome.jpg"} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} />
+                <SignIn image={"../../src/assets/Employee-Welcome.jpg"} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} targetedstate={EmployeeState} statevalue={signinform} redirectpath={"/auth/employee/forgot-password"} />
             </div>
         </div>
     )

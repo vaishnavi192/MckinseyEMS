@@ -2,11 +2,11 @@ import { ErrorPopup } from "./error-popup"
 import { useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 
-export const ForgotPassowrd = ({ handleforgotpasswordsubmit, handlesforgotpasswordform }) => {
+export const ForgotPassowrd = ({ handleforgotpasswordsubmit, handlesforgotpasswordform, targetState, redirectpath }) => {
     const EmplyoeeState = useSelector((state) => state.employeereducer)
     return (
         <>
-            {EmplyoeeState.error.status ? <ErrorPopup error={EmplyoeeState.error.message} /> : null}
+            {targetState.error.status ? <ErrorPopup error={targetState.error.message} /> : null}
             <div className="flex min-h-full flex-1 min-[200px]:flex-col md:flex-row md:items-center justify-center px-6 py-12 lg:px-8 md:gap-5">
 
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
@@ -44,7 +44,7 @@ export const ForgotPassowrd = ({ handleforgotpasswordsubmit, handlesforgotpasswo
                             >
                                 Get Reset Email
                             </button>
-                            <Link to={"/auth/employee/login"}>
+                            <Link to={redirectpath}>
                                 <button
                                     className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                 >

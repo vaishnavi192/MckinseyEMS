@@ -41,25 +41,31 @@ export const HRSignupPage = () => {
 
 
     if (HRState.error.status) {
-        loadingbar.current.complete() 
+        loadingbar.current.complete()
     }
 
     useEffect(() => {
-        if (!HRState.isAuthenticated) {
+        if (!HRState.isAuthenticated && !HRState.isVerified) {
             dispatch(HandleGetHumanResources({ apiroute: "CHECKLOGIN" }))
+            dispatch(HandleGetHumanResources({ apiroute: "CHECK_VERIFY_EMAIL" }))
         }
 
-        if (HRState.isAuthenticated) {
+        if (HRState.isAuthenticated && HRState.isVerified) {
             loadingbar.current.complete()
             navigate("/auth/HR/dashboard")
         }
-    }, [HRState.isAuthenticated])
 
-    console.log(signupform)
+        if (HRState.isAuthenticated && !HRState.isVerified) {
+            loadingbar.current.complete()
+            navigate("/auth/HR/verify-email")
+        }
+    }, [HRState.isAuthenticated, HRState.isVerified])
+
+    // console.log(signupform)
     console.log(HRState)
 
     return (
-        <div className="HRsigniup-page-container h-[100vh] flex justify-center items-center">
+        <div className="HRsignup-page-container h-[100vh] flex justify-center items-center">
             <LoadingBar ref={loadingbar} />
             <SignUP stateformdata={signupform} handlesignupform={handlesignupform} handlesubmitform={handlesubmitform} errorpopup={errorpopup} />
         </div>

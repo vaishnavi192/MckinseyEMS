@@ -5,14 +5,16 @@ import { HandlePostHumanResources, HandleGetHumanResources } from "../Thunks/HRT
 const HRSlice = createSlice({
     name: "HumanResources",
     initialState: {
-        data: [],
+        data: null,
         isLoading: false,
         isAuthenticated: false,
-        isSignUp : false,
+        isSignUp: false,
         isAuthourized: false,
-        isResetPasswords: false, 
+        isVerified: false,
+        isVerifiedEmailAvailable : false, 
+        isResetPassword: false,
         error: {
-            status: false,
+            status: false,  
             message: null,
             content: null
         }

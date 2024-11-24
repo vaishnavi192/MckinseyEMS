@@ -23,7 +23,7 @@ export const ForgotPassword = () => {
         dispatch(HandlePostEmployees({ apiroute: "FORGOT_PASSWORD", data: forgotpassowrdform }))
     }
 
-    if ((!EmplyoeeState.isLoading) && (EmplyoeeState.error.status)) {
+    if ((!EmplyoeeState.isLoading) && (EmplyoeeState.error.status)) { 
         loadingbar.current.complete()
     }
 
@@ -38,7 +38,7 @@ export const ForgotPassword = () => {
         <div className="employee-login-container">
             <LoadingBar ref={loadingbar} />
             <div className="employee-login-content flex justify-center items-center h-[100vh]">
-                <ForgotPassowrd handleforgotpasswordsubmit={handleforgotpasswordsubmit} handlesforgotpasswordform={handlesforgotpasswordform} />
+                <ForgotPassowrd handleforgotpasswordsubmit={handleforgotpasswordsubmit} handlesforgotpasswordform={handlesforgotpasswordform} targetState={EmplyoeeState} redirectpath={"/auth/employee/login"}/>
             </div>
         </div>
     )

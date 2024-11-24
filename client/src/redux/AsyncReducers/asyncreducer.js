@@ -39,10 +39,57 @@ export const HRAsyncReducer = (builder, thunk) => {
             state.error.content = null;
         })
         .addCase(thunk.fulfilled, (state, action) => {
-            if ((action.payload.type == "signup") || (action.payload.type == "checkHR")) {
+            if (action.payload.type == "signup") {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
+                state.isVerifiedEmailAvailable = true
+                state.error.status = false;
+                state.data = action.payload;
+            }
+            if ((action.payload.type == "checkHR") || (action.payload.type == "HRLogin") || (action.payload.type == "HRforgotpassword")) {
+                state.isSignUp = true
+                state.isLoading = false;
+                state.isAuthenticated = true
+                state.error.status = false;
+                state.data = action.payload;
+            }
+            if (action.payload.type == "HRverifyemail") {
+                state.isSignUp = true
+                state.isLoading = false;
+                state.isAuthenticated = true
+                state.isVerifiedEmailAvailable = false
+                state.isVerified = true
+                state.error.status = false;
+                state.data = action.payload;
+            }
+            if (action.payload.type == "HRcodeavailable") {
+                state.isSignUp = true
+                state.isLoading = false;
+                state.isAuthenticated = true
+                if (action.payload.alreadyverified) {
+                    state.isVerified = true
+                }
+                else {
+                    state.isVerified = false
+                }
+                state.isVerifiedEmailAvailable = true
+                state.error.status = false;
+                state.data = action.payload;
+            }
+            if (action.payload.resetpassword) {
+                state.isSignUp = true
+                state.isLoading = false;
+                state.isAuthenticated = false;
+                state.isResetPassword = true
+                state.error.status = false;
+                state.data = action.payload;
+            }
+            if (action.payload.type == "HRResendVerifyEmail") {
+                state.isSignUp = true
+                state.isLoading = false;
+                state.isAuthenticated = true
+                state.isVerifiedEmailAvailable = true
                 state.error.status = false;
                 state.data = action.payload;
             }
@@ -55,7 +102,16 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.error.message = action.payload.message
                 state.error.content = action.payload
             }
-            else if (action.payload.gologin) {
+            if (action.payload.type == "HRcodeavailable") {
+                // state.isSignUp = true
+                state.isLoading = false;
+                // state.isAuthenticated = true
+                state.isVerified = false
+                state.isVerifiedEmailAvailable = false
+                state.error.status = false;
+                state.error.content = action.payload
+            }
+            if (action.payload.gologin) {
                 state.isSignUp = false
                 state.isLoading = false;
                 state.isAuthenticated = false

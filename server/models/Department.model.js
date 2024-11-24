@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { Schema } from "mongoose";
 
-const DepartmentSchema = new Schema({
+const DepartmentSchema = new Schema({ 
     name: {
         type: String,
         required: true
