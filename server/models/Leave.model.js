@@ -5,7 +5,7 @@ const LeaveSchema = new Schema({
   employee: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref : "Employee"
+    ref: "Employee"
   },
   startdate: {
     type: Date,
@@ -15,6 +15,11 @@ const LeaveSchema = new Schema({
     type: Date,
     required: true
   },
+  title: {
+    type: String,
+    required: true,
+    default: "Leave Application"
+  },
   reason: {
     type: String,
     required: true
@@ -23,13 +28,12 @@ const LeaveSchema = new Schema({
     type: String,
     required: true,
     enum: ["Pending", "Rejected", "Approved"],
-    default : "Pending"
+    default: "Pending"
   },
   approvedby: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref : "HumanResources"
+    ref: "HumanResources"
   }
-});
+}, { timestamps: true });
 
 export const Leave = mongoose.model("Leave", LeaveSchema)

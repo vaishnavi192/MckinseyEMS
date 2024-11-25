@@ -10,7 +10,6 @@ const InterviewinsightSchema = new Schema({
     },
     feedback: {
         type: String,
-        required: true
     },
     interviewer: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,17 +18,16 @@ const InterviewinsightSchema = new Schema({
     },
     interviewdate: {
         type: Date,
-        required: true
     },
     responsedate: {
         type: Date,
-        required: true
     },
     status: {
         type: String,
         required: true,
         enum: ["Pending", "Canceled", "Completed"],
+        default: "Pending"
     }
-});
+}, { timestamps: true });
 
 export const Interviewinsight = mongoose.model("Interviewinsight", InterviewinsightSchema)

@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 const SalarySchema = new Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Employee",
+        ref: "Employee",
         required: true
     },
     basicpay: {
@@ -19,19 +19,31 @@ const SalarySchema = new Schema({
         type: Number,
         required: true
     },
+    netpay: {
+        type: Number,
+        required: true
+    },
     currency: {
         type: String,
         required: true
     },
+    duedate: {
+        type: Date,
+        required: true,
+        validate: {
+            validator: (v) => v >= new Date(),
+            message: "Due date must be in the future",
+        }
+    },
     paymentdate: {
         type: Date,
-        required: true
     },
     status: {
         type: String,
         required: true,
-        enum: ["Pending", "Delayed", "Paid"]
+        enum: ["Pending", "Delayed", "Paid"],
+        default: "Pending",
     }
-});
+}, { timestamps: true });
 
 export const Salary = mongoose.model('Salary', SalarySchema)

@@ -6,7 +6,7 @@ const HumanResourcesSchema = new Schema({
         type: String,
         required: true
     },
-    lastname: { 
+    lastname: {
         type: String,
         required: true
     },
@@ -56,8 +56,10 @@ const HumanResourcesSchema = new Schema({
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Department",
+        ref: "Department",
     }
+}, {
+    timestamps: true
 });
 
 export const HumanResources = mongoose.model("HumanResources", HumanResourcesSchema)

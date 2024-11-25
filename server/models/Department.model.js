@@ -22,6 +22,12 @@ const DepartmentSchema = new Schema({
             ref: "HumanResources"
         }
     ],
-});
+    notice: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Notice"
+        }
+    ]
+}, { timestamps: true });
 
 export const Department = mongoose.model("Department", DepartmentSchema)

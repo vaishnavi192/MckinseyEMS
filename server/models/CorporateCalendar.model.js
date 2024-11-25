@@ -18,7 +18,7 @@ const CorporateCalendarSchema = new Schema({
         type: String,
         required: true
     }
-});
+}, { timestamps: true });
 
 export const CorporateCalendar = mongoose.model("CorporateCalendar")
 

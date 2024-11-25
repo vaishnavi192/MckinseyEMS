@@ -24,6 +24,6 @@ const GenerateRequestSchema = new Schema({
         required: true,
         ref : "Department"
     }
-});
+}, { timestamps: true });
 
 export const GenerateRequest = mongoose.model("GenerateRequest", GenerateRequestSchema)

@@ -4,6 +4,11 @@ import { Employee } from "../models/Employee.model.js"
 export const HandleCreateDepartment = async (req, res) => {
     try {
         const { name, description } = req.body
+
+        if (!name ||!description) {
+            return res.status(400).json({ success: false, message: "All fields are required" })
+        }
+
         const department = await Department.findOne({ name: name })
 
         if (department) {
@@ -57,7 +62,7 @@ export const HandleUpdateDepartment = async (req, res) => {
 
         if (employeeIDArray) {
 
-            const employees = SelectedDepartment.employees
+            const employees = SelectedDepartment.employees 
 
             const SelectedEmployees = []
             const RejectedEmployees = []
@@ -73,7 +78,7 @@ export const HandleUpdateDepartment = async (req, res) => {
 
             if (RejectedEmployees.length > 0) {
                 return res.status(400).json({ success: false, message: `Some Employees Are Already Belongs To ${SelectedDepartment.name} Department`, EmployeeList: RejectedEmployees })
-            }
+            } 
 
             for (let index = 0; index < SelectedEmployees.length; index++) {
                 employees.push(SelectedEmployees[index])

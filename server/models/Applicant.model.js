@@ -21,14 +21,19 @@ const ApplicantSchema = new Schema({
             message: 'Invalid email address format',
         }
     },
-    contactnumber : {
+    contactnumber: {
         type: String,
         required: true
     },
     appliedrole: {
         type: String,
         required: true
-    }
-})
+    },
+    recruitmentstatus: {
+        type: String,
+        enum: ['Conduct-Interview', 'Rejected', 'Pending', 'Interview Completed', 'Not Specified'],
+        default: 'Not Specified'
+    },
+}, { timestamps: true })
 
 export const Applicant = mongoose.model("Applicant", ApplicantSchema)

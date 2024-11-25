@@ -8,11 +8,12 @@ const NoticeSchema = new Schema({
     },
     content: {
         type: String,
-        required: true
+        required: true 
     },
     audience: {
         type: String,
-        required: true
+        required: true,
+        enum : ["Department-Specific", "Employee-Specific"]
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
@@ -27,6 +28,9 @@ const NoticeSchema = new Schema({
         required: true,
         ref : "HumanResources"
     }
+},
+{
+    timestamps : true
 });
 
 export const Notice = mongoose.model("Notice", NoticeSchema)

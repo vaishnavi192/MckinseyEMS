@@ -56,28 +56,36 @@ const EmployeeSchema = new Schema({
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Department"
+        ref: "Department"
     },
     attendance: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Attendance"
+        ref: "Attendance"
     },
-    notice: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "Notice"
-    },
-    salary: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "Salary"
-    },
-    leaverequest: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "Leave"
-    },
-    generaterequest: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref : "GenerateRequest"
-    }
+    notice: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Notice"
+        }
+    ],
+    salary: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Salary"
+        }
+    ],
+    leaverequest: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Leave"
+        }
+    ],
+    generaterequest: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "GenerateRequest"
+        }
+    ]
 },
     { timestamps: true }
 );

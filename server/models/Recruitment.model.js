@@ -6,23 +6,20 @@ const RecruitmentSchema = new Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
         ref: "Department"
     },
-    applications: [
+    application: [ 
         {
             type: mongoose.Schema.Types.ObjectId,
-            required: true,
             ref: "Applicant"
         }
     ],
-    status: {
-        type: String,
-        required: true,
-        enum: ['Conduct-Interview', 'Rejected', 'Pending']
-    }
-});
+}, { timestamps: true });
 
 export const Recruitment = mongoose.model('Recruitment', RecruitmentSchema)

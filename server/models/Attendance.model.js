@@ -6,17 +6,26 @@ const AttendanceSchema = new Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref : "Employee"
-    },
-    date: {
-        type: Date,
-        required: true
+        ref: "Employee"
     },
     status: {
         type: String,
         required: true,
-        enum: ["Present", "Absent"],
-    }
-});
+        enum: ['Present', 'Absent', 'Not Specified']
+    },
+    attendancelog: [
+        {
+            logdate: {
+                type: Date,
+                required: true
+            },
+            logstatus: {
+                type: String,
+                required: true,
+                enum: ['Present', 'Absent', 'Not Specified']
+            }
+        }
+    ],
+}, { timestamps: true });
 
 export const Attendance = mongoose.model("Attendance", AttendanceSchema)
