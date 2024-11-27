@@ -34,6 +34,10 @@ const ApplicantSchema = new Schema({
         enum: ['Conduct-Interview', 'Rejected', 'Pending', 'Interview Completed', 'Not Specified'],
         default: 'Not Specified'
     },
+    organizationID : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
+    }
 }, { timestamps: true })
 
 export const Applicant = mongoose.model("Applicant", ApplicantSchema)

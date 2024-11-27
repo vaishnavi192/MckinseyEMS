@@ -17,8 +17,12 @@ const CorporateCalendarSchema = new Schema({
     audience: {
         type: String,
         required: true
+    },
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
     }
 }, { timestamps: true });
 
-export const CorporateCalendar = mongoose.model("CorporateCalendar")
+export const CorporateCalendar = mongoose.model("CorporateCalendar", CorporateCalendarSchema)
 

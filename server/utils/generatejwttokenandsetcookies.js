@@ -13,8 +13,8 @@ export const GenerateJwtTokenAndSetCookiesEmployee = (res, EMid, EMrole) => {
     return token
 }
 
-export const GenerateJwtTokenAndSetCookiesHR = (res, HRid, HRrole) => {
-    const token = jwt.sign({ HRid, HRrole }, process.env.JWT_SECRET, { expiresIn: '7d' })
+export const GenerateJwtTokenAndSetCookiesHR = (res, HRid, HRrole, ORGID) => {
+    const token = jwt.sign({ HRid, HRrole, ORGID }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
     res.cookie("HRtoken", token, {
         maxAge: 7 * 24 * 60 * 60 * 1000,

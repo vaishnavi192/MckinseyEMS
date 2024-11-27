@@ -132,7 +132,7 @@ export const HandleDeleteDepartment = async (req, res) => {
 
             await department.save()
 
-            await Employee.findByIdAndUpdate(employeeIDArray, { $set: { department: null } })
+            await Employee.updateMany({ _id: { $in: employeeIDArray } }, { $set: { department: null } })
 
             return res.status(200).json({ success: true, message: "Employee deleted successfully" })
         }

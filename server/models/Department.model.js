@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { Schema } from "mongoose";
 
-const DepartmentSchema = new Schema({ 
+const DepartmentSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -18,7 +18,7 @@ const DepartmentSchema = new Schema({
     ],
     HumanResources: [
         {
-            type: mongoose.Schema.Types.ObjectId, 
+            type: mongoose.Schema.Types.ObjectId,
             ref: "HumanResources"
         }
     ],
@@ -27,7 +27,11 @@ const DepartmentSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Notice"
         }
-    ]
+    ],
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
+    }
 }, { timestamps: true });
 
 export const Department = mongoose.model("Department", DepartmentSchema)

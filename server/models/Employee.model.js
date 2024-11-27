@@ -85,7 +85,11 @@ const EmployeeSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "GenerateRequest"
         }
-    ]
+    ],
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
+    }
 },
     { timestamps: true }
 );

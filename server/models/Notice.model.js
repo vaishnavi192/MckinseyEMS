@@ -8,29 +8,33 @@ const NoticeSchema = new Schema({
     },
     content: {
         type: String,
-        required: true 
+        required: true
     },
     audience: {
         type: String,
         required: true,
-        enum : ["Department-Specific", "Employee-Specific"]
+        enum: ["Department-Specific", "Employee-Specific"]
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Department"
+        ref: "Department"
     },
     employee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Employee"
+        ref: "Employee"
     },
     createdby: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref : "HumanResources"
+        ref: "HumanResources"
+    },
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
     }
 },
-{
-    timestamps : true
-});
+    {
+        timestamps: true
+    });
 
 export const Notice = mongoose.model("Notice", NoticeSchema)

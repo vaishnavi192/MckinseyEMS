@@ -33,6 +33,10 @@ const LeaveSchema = new Schema({
   approvedby: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "HumanResources"
+  },
+  organizationID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Organization"
   }
 }, { timestamps: true });
 

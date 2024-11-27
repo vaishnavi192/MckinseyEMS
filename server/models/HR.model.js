@@ -33,10 +33,11 @@ const HumanResourcesSchema = new Schema({
         type: String,
         enum: ["HR-Admin", "Employee"],
         required: true,
+        default: "HR-Admin"
     },
     lastlogin: {
         type: Date,
-        default: Date.now
+        default: new Date()
     },
     isverified: {
         type: Boolean,
@@ -57,6 +58,10 @@ const HumanResourcesSchema = new Schema({
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department",
+    },
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
     }
 }, {
     timestamps: true

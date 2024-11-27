@@ -27,6 +27,10 @@ const InterviewinsightSchema = new Schema({
         required: true,
         enum: ["Pending", "Canceled", "Completed"],
         default: "Pending"
+    },
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
     }
 }, { timestamps: true });
 

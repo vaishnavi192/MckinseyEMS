@@ -14,12 +14,16 @@ const RecruitmentSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department"
     },
-    application: [ 
+    application: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Applicant"
         }
     ],
+    organizationID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Organization"
+    }
 }, { timestamps: true });
 
 export const Recruitment = mongoose.model('Recruitment', RecruitmentSchema)

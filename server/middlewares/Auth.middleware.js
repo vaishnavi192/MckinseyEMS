@@ -30,6 +30,8 @@ export const VerifyhHRToken = (req, res, next) => {
             return res.status(403).json({ success: false, message: "unauthenticated employee", gologin : true })
         }
         req.HRid = decoded.HRid
+        req.ORGID = decoded.ORGID
+        req.Role = decoded.HRrole
         next()
     } catch (error) {
         return res.status(500).json({ success: false, message: "internal server error", error: error }) 
