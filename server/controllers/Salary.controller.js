@@ -26,7 +26,7 @@ export const HandleCreateSalary = async (req, res) => {
             deductions: deductions,
             netpay: netpay,
             currency: currency,
-            duedate: new Date(duedate)
+            duedate: new Date(duedate),
         })
 
         if (salarycheck) {
@@ -40,7 +40,8 @@ export const HandleCreateSalary = async (req, res) => {
             deductions: deductions,
             netpay: netpay,
             currency: currency,
-            duedate: new Date(duedate)
+            duedate: new Date(duedate),
+            organizationID: req.ORGID
         })
 
         employee.salary.push(salary._id)
@@ -55,7 +56,7 @@ export const HandleCreateSalary = async (req, res) => {
 
 export const HandleAllSalary = async (req, res) => {
     try {
-        const salary = await Salary.find({}).populate("employee", "firstname lastname department")
+        const salary = await Salary.find({ organizationID: req.ORGID }).populate("employee", "firstname lastname department")
         return res.status(200).json({ success: true, message: "All salary records retrieved successfully", data: salary })
 
     } catch (error) {
@@ -66,7 +67,7 @@ export const HandleAllSalary = async (req, res) => {
 export const HandleSalary = async (req, res) => {
     try {
         const { salaryID } = req.params
-        const salary = await Salary.findById(salaryID).populate("employee", "firstname lastname department")
+        const salary = await Salary.findOne({ _id: salaryID, organizationID: req.ORGID }).populate("employee", "firstname lastname department")
         return res.status(200).json({ success: true, message: "salary found", data: salary })
     } catch (error) {
         return res.status(500).json({ success: false, error: error, message: "Internal Server Error" })
@@ -105,16 +106,14 @@ export const HandleUpdateSalary = async (req, res) => {
 export const HandleDeleteSalary = async (req, res) => {
     try {
         const { salaryID } = req.params
-        const salary = await Salary.findById(salaryID)
+        const salary = await Salary.findOne({ _id: salaryID, organizationID: req.ORGID })
 
         if (!salary) {
             return res.status(404).json({ success: false, message: "Salary record not found" })
         }
 
         const employee = await Employee.findById(salary.employee)
-
-        const index = employee.salary.indexOf(salaryID)
-        employee.salary.splice(index, 1)
+        employee.salary.splice(employee.salary.indexOf(salaryID), 1)
 
         await employee.save()
         await salary.deleteOne()

@@ -7,12 +7,12 @@ import { GenerateRequest } from "../models/GenerateRequest.model.js"
 
 export const HandleHRDashboard = async (req, res) => {
     try {
-        const employees = await Employee.countDocuments()
-        const departments = await Department.countDocuments()
-        const leaves = await Leave.countDocuments()
-        const requestes = await GenerateRequest.countDocuments()
-        const salaries = await Salary.find().sort({ createdAt: -1 }).limit(10)
-        const notices = await Notice.find().sort({ createdAt: -1 }).limit(10)
+        const employees = await Employee.countDocuments({ organizationID: req.ORGID })
+        const departments = await Department.countDocuments({ organizationID: req.ORGID })
+        const leaves = await Leave.countDocuments({ organizationID: req.ORGID })
+        const requestes = await GenerateRequest.countDocuments({ organizationID: req.ORGID })
+        const salaries = await Salary.find({ organizationID: req.ORGID }).sort({ createdAt: -1 }).limit(10)
+        const notices = await Notice.find({ organizationID: req.ORGID }).sort({ createdAt: -1 }).limit(10)
 
         return res.status(200).json({ success: true, data: { employees: employees, departments: departments, leaves: leaves, requestes: requestes, salaries: salaries, notices: notices } })
     }

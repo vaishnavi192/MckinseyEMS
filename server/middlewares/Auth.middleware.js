@@ -12,6 +12,8 @@ export const VerifyEmployeeToken = (req, res, next) => {
             return res.status(403).json({ success: false, message: "unauthenticated employee", gologin : true }) 
         }
         req.EMid = decoded.EMid
+        req.EMrole = decoded.EMrole
+        req.ORGID = decoded.ORGID
         next()
     } catch (error) {
         return res.status(500).json({ success: false, message: "internal server error", error: error }) 

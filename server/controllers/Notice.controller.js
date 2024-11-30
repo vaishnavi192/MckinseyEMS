@@ -8,6 +8,7 @@ export const HandleCreateNotice = async (req, res) => {
         const { title, content, audience, departmentID, employeeID, HRID } = req.body
 
         if (audience === "Department-Specific") {
+
             if (!title || !content || !audience || !departmentID || !HRID) {
                 return res.status(404).json({ success: false, message: "All fields must be provided" })
             }
@@ -35,7 +36,8 @@ export const HandleCreateNotice = async (req, res) => {
                 content: content,
                 audience: audience,
                 department: departmentID,
-                createdby: HRID
+                createdby: HRID,
+                organizationID: req.ORGID
             })
 
             department.notice.push(notice._id)
@@ -72,7 +74,8 @@ export const HandleCreateNotice = async (req, res) => {
                 content: content,
                 audience: audience,
                 employee: employeeID,
-                createdby: HRID
+                createdby: HRID,
+                organizationID: req.ORGID
             })
 
             employee.notice.push(notice._id)
@@ -90,7 +93,7 @@ export const HandleCreateNotice = async (req, res) => {
 
 export const HandleAllNotice = async (req, res) => {
     try {
-        const notices = await Notice.find({}).populate("employee department createdby", "firstname lastname department name description")
+        const notices = await Notice.find({ organizationID: req.ORGID }).populate("employee department createdby", "firstname lastname department name description")
         const data = {
             department_notices: [],
             employee_notices: []
@@ -103,6 +106,7 @@ export const HandleAllNotice = async (req, res) => {
                 data.employee_notices.push(notices[index])
             }
         }
+
         return res.status(200).json({ success: true, message: "All notice records retrieved successfully", data: data })
 
     } catch (error) {
@@ -114,7 +118,7 @@ export const HandleNotice = async (req, res) => {
     try {
         const { noticeID } = req.params
 
-        const notice = await Notice.findById(noticeID)
+        const notice = await Notice.findOne({ _id: noticeID, organizationID: req.ORGID })
 
         if (!notice) {
             return res.status(404).json({ success: false, message: "Notice not found" })
@@ -157,9 +161,7 @@ export const HandleDeleteNotice = async (req, res) => {
 
         if (notice.employee) {
             const employee = await Employee.findById(notice.employee)
-
-            const index = employee.notice.indexOf(noticeID)
-            employee.notice.splice(index, 1)
+            employee.notice.splice(employee.notice.indexOf(noticeID), 1)
 
             await employee.save()
             await notice.deleteOne()
@@ -169,9 +171,7 @@ export const HandleDeleteNotice = async (req, res) => {
 
         if (notice.department) {
             const department = await Department.findById(notice.department)
-
-            const index = department.notice.indexOf(noticeID)
-            department.notice.splice(index, 1)
+            department.notice.splice(department.notice.indexOf(noticeID), 1)
 
             await department.save()
             await notice.deleteOne()

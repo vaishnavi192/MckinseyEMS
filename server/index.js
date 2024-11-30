@@ -16,10 +16,10 @@ import ApplicantRouter from './routes/Applicant.route.js'
 import InterviewInsightRouter from './routes/InterviewInsights.route.js'
 import GenerateRequestRouter from './routes/GenerateRequest.route.js'
 import CorporateCalendarRouter from './routes/CorporateCalendar.route.js'
+import BalanceRouter from './routes/Balance.route.js'
 import { ConnectDB } from './config/connectDB.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors"
-import { Notice } from './models/Notice.model.js';
 
 
 dotenv.config()
@@ -34,7 +34,7 @@ app.use(cors({
 }));
 // app.options('*', cors())
 
-app.use("/api/auth/employee", EmployeeAuthRouter)
+app.use("/api/auth/employee", EmployeeAuthRouter) 
 
 app.use("/api/auth/HR", HRAuthrouter)
 
@@ -63,6 +63,8 @@ app.use("/api/v1/interview-insights", InterviewInsightRouter)
 app.use("/api/v1/generate-request", GenerateRequestRouter)
 
 app.use("/api/v1/corporate-calendar", CorporateCalendarRouter)
+
+app.use("/api/v1/balance", BalanceRouter)
 
 app.listen(process.env.PORT, async () => {
   await ConnectDB()

@@ -2,16 +2,23 @@ import { Employee } from "../models/Employee.model.js"
 import bcrypt from 'bcrypt'
 import { GenerateVerificationToken } from "../utils/generateverificationtoken.js"
 import { SendVerificationEmail, SendWelcomeEmail, SendForgotPasswordEmail, SendResetPasswordConfimation } from "../mailtrap/emails.js"
-import { GenerateJwtTokenAndSetCookiesEmployee } from "../utils/generatejwttokenandsetcookies.js" 
+import { GenerateJwtTokenAndSetCookiesEmployee } from "../utils/generatejwttokenandsetcookies.js"
 import crypto from "crypto"
+import { Organization } from "../models/Organization.model.js"
 
 
 export const HandleEmplyoeeSignup = async (req, res) => {
-    const { firstname, lastname, email, password, contactnumber, department } = req.body
+    const { firstname, lastname, email, password, contactnumber, OrganizationName, OrganizationURL } = req.body
     try {
 
-        if (!firstname || !lastname || !email || !password || !contactnumber) {
+        if (!firstname || !lastname || !email || !password || !contactnumber || !OrganizationName || !OrganizationURL) {
             throw new Error("All Fields are required")
+        }
+
+        const organization = await Organization.findOne({ name: OrganizationName, OrganizationURL: OrganizationURL })
+
+        if (!organization) {
+            return res.status(404).json({ success: false, message: "Organization or Company not found" })
         }
 
         try {
@@ -22,7 +29,7 @@ export const HandleEmplyoeeSignup = async (req, res) => {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10)
-            const verificationcode = GenerateVerificationToken(6) 
+            const verificationcode = GenerateVerificationToken(6)
 
             const newEmployee = await Employee.create({
                 firstname: firstname,
@@ -32,10 +39,16 @@ export const HandleEmplyoeeSignup = async (req, res) => {
                 contactnumber: contactnumber,
                 role: "Employee",
                 verificationtoken: verificationcode,
-                verificationtokenexpires: Date.now() + 5 * 60 * 1000
+                verificationtokenexpires: Date.now() + 5 * 60 * 1000,
+                organizationID: organization._id
             })
-            GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role)
+
+            organization.employees.push(newEmployee._id)
+            await organization.save()
+
+            GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role, organization._id)
             const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
+
             return res.status(201).json({ success: true, message: "Employee Registered Successfully", SendVerificationEmailStatus: VerificationEmailStatus, newEmployee: newEmployee.email })
 
         } catch (error) {
@@ -52,7 +65,7 @@ export const HandleEmplyoeeVerifyEmail = async (req, res) => {
     const { verificationcode } = req.body
 
     try {
-        const ValidateEmployee = await Employee.findOne({ verificationtoken: verificationcode, verificationtokenexpires: { $gt: Date.now() } })
+        const ValidateEmployee = await Employee.findOne({ verificationtoken: verificationcode, verificationtokenexpires: { $gt: Date.now() }, organizationID: req.ORGID })
 
         if (!ValidateEmployee) {
             return res.status(404).json({ success: false, message: "Invalid or Expired Verifiation Code" })
@@ -64,6 +77,7 @@ export const HandleEmplyoeeVerifyEmail = async (req, res) => {
         await ValidateEmployee.save()
 
         const SendWelcomeEmailStatus = await SendWelcomeEmail(ValidateEmployee.email, ValidateEmployee.firstname, ValidateEmployee.lastname)
+
         return res.status(200).json({ success: true, message: "Employee Email verified successfully", validatedEmployee: ValidateEmployee, SendWelcomeEmailStatus: SendWelcomeEmailStatus })
 
     } catch (error) {
@@ -75,7 +89,7 @@ export const HandleResetEmplyoeeVerifyEmail = async (req, res) => {
     const { email } = req.body
 
     try {
-        const employee = await Employee.findOne({ email: email }) 
+        const employee = await Employee.findOne({ email: email })
 
         if (!employee.email) {
             return res.status(404).json({ success: false, message: "Employee Email Does Not Exist, Please Enter Valid Email Address" })
@@ -114,8 +128,9 @@ export const HandleEmplyoeeLogin = async (req, res) => {
             return res.status(404).json({ success: false, message: "Invalid Credentials, Please Enter Correct One" })
         }
 
-        GenerateJwtTokenAndSetCookiesEmployee(res, employee._id, employee.role)
+        GenerateJwtTokenAndSetCookiesEmployee(res, employee._id, employee.role, employee.organizationID)
         employee.lastlogin = new Date()
+
         await employee.save()
         return res.status(200).json({ success: true, message: "Emplyoee Login Successfull" })
 
@@ -127,7 +142,7 @@ export const HandleEmplyoeeLogin = async (req, res) => {
 
 export const HandleEmployeeCheck = async (req, res) => {
     try {
-        const employee = await Employee.findById(req.EMid)
+        const employee = await Employee.findOne({ _id: req.EMid, organizationID: req.ORGID })
         if (!employee) {
             return res.status(404).json({ success: false, message: "Employee not found" })
         }
@@ -139,7 +154,7 @@ export const HandleEmployeeCheck = async (req, res) => {
 
 export const HandleEmplyoeeLogout = async (req, res) => {
     try {
-        res.clearCookie("token")
+        res.clearCookie("EMtoken")
         return res.status(200).json({ success: true, message: "Logged out successfully" })
     } catch (error) {
         console.error(error)
@@ -150,7 +165,7 @@ export const HandleEmplyoeeLogout = async (req, res) => {
 export const HandleEmplyoeeForgotPassword = async (req, res) => {
     const { email } = req.body
     try {
-        const employee = await Employee.findOne({ email: email })
+        const employee = await Employee.findOne({ email: email, organizationID: req.ORGID })
 
         if (!employee) {
             return res.status(401).json({ success: false, message: "Employee Email Does Not Exist, Please Enter Correct One" })
@@ -176,10 +191,11 @@ export const HandleEmplyoeeSetPassword = async (req, res) => {
     const { token } = req.params
     const { password } = req.body
     try {
-        if (req.cookies.token) { 
-            res.clearCookie("token")
+        if (req.cookies.token) {
+            res.clearCookie("EMtoken")
         }
         const employee = await Employee.findOne({ resetpasswordtoken: token, resetpasswordexpires: { $gt: Date.now() } })
+
         if (!employee) {
             return res.status(404).json({ success: false, message: "Invalid or Expired Reset Password Token", resetpassword: false })
         }
@@ -193,5 +209,28 @@ export const HandleEmplyoeeSetPassword = async (req, res) => {
         return res.status(200).json({ success: true, message: "Password Reset Successful", SendResetPasswordConfimationStatus: SendResetPasswordConfimationStatus, resetpassword: true })
     } catch (error) {
         res.status(500).json({ success: false, message: "internal server error", error: error })
+    }
+}
+
+export const HandleEmployeeCheckVerifyEmail = async (req, res) => {
+    try {
+        const employee = await Employee.findOne({ _id: req.EMid, organizationID : req.ORGID})
+
+        if (!employee) {
+            return res.status(404).json({ success: false, message: "Employee not found", type: "Employeecodeavailable" })
+        }
+
+        if (employee.isverified) {
+            return res.status(200).json({ success: false, message: "Employee Already Verified", type: "Employeecodeavailable" })
+        }
+
+        if ((employee.verificationtoken) && (employee.verificationtokenexpires > Date.now())) {
+            return res.status(200).json({ success: true, message: "Verification Code is Still Valid", type: "Employeecodeavailable" })
+        }
+
+        return res.status(200).json({ success: false, message: "Invalid or Expired Verification Code", type: "Employeecodeavailable" })
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
     }
 }

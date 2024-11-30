@@ -10,13 +10,13 @@ export const HandleCreateGenerateRequest = async (req, res) => {
             return res.status(400).json({ success: false, message: "All fields are required" })
         }
 
-        const employee = await Employee.findById(employeeID)
+        const employee = await Employee.findOne({ _id: employeeID, organizationID: req.ORGID })
 
         if (!employee) {
             return res.status(404).json({ success: false, message: "Employee not found" })
         }
 
-        const department = await Department.findById(employee.department)
+        const department = await Department.findOne({ _id: employee.department, organizationID: req.ORGID })
 
         if (!department) {
             return res.status(404).json({ success: false, message: "Department not found" })
@@ -37,7 +37,8 @@ export const HandleCreateGenerateRequest = async (req, res) => {
             requesttitle: requesttitle,
             requestconent: requestconent,
             employee: employeeID,
-            department: employee.department
+            department: employee.department,
+            organizationID: req.ORGID
         })
 
         employee.generaterequest.push(newGenerateRequest._id)
@@ -51,7 +52,7 @@ export const HandleCreateGenerateRequest = async (req, res) => {
 
 export const HandleAllGenerateRequest = async (req, res) => {
     try {
-        const requestes = await GenerateRequest.find({}).populate("employee department", "firstname lastname name")
+        const requestes = await GenerateRequest.find({ organizationID: req.ORGID }).populate("employee department", "firstname lastname name")
         return res.status(200).json({ success: true, message: "All requestes retrieved successfully", data: requestes })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
@@ -61,7 +62,7 @@ export const HandleAllGenerateRequest = async (req, res) => {
 export const HandleGenerateRequest = async (req, res) => {
     try {
         const { requestID } = req.params
-        const request = await GenerateRequest.findById(requestID).populate("employee department", "firstname lastname name")
+        const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID }).populate("employee department", "firstname lastname name")
         if (!request) {
             return res.status(404).json({ success: false, message: "Request not found" })
         }
@@ -107,7 +108,9 @@ export const HandleUpdateRequestByHR = async (req, res) => {
 export const HandleDeleteRequest = async (req, res) => {
     try {
         const { requestID } = req.params
-        const request = await GenerateRequest.findById(requestID)
+        const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID }
+
+        )
 
         if (!request) {
             return res.status(404).json({ success: false, message: "Request not found" })

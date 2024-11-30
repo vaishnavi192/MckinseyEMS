@@ -183,7 +183,7 @@ export const HandleHRForgotPassword = async (req, res) => {
     }
 }
 
-export const HandleHRResetPassword = async (req, res) => {
+export const HandleHRResetPassword = async (req, res) => { 
     const { token } = req.params
     const { password } = req.body
 
@@ -257,4 +257,4 @@ export const HandleHRcheckVerifyEmail = async (req, res) => {
     catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRcodeavailable" })
     }
-}
+} 

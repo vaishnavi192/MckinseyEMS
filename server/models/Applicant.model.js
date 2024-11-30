@@ -24,7 +24,7 @@ const ApplicantSchema = new Schema({
     contactnumber: {
         type: String,
         required: true
-    },
+    }, 
     appliedrole: {
         type: String,
         required: true

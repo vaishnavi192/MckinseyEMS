@@ -5,7 +5,7 @@ export const HandleCreateDepartment = async (req, res) => {
     try {
         const { name, description } = req.body
 
-        if (!name ||!description) {
+        if (!name || !description) {
             return res.status(400).json({ success: false, message: "All fields are required" })
         }
 
@@ -17,18 +17,19 @@ export const HandleCreateDepartment = async (req, res) => {
 
         const newDepartment = await Department.create({
             name,
-            description
+            description,
+            organizationID: req.ORGID
         })
 
         return res.status(200).json({ success: true, message: "Department created successfully", department: newDepartment })
     } catch (error) {
-
+        return res.status(500).json({ success: false, message: "Internal server error" })
     }
 }
 
 export const HandleAllDepartments = async (req, res) => {
     try {
-        const departments = await Department.find({})
+        const departments = await Department.find({ organizationID: req.ORGID })
         return res.status(200).json({ success: true, message: "All departments retrieved successfully", departments: departments })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal server error" })
@@ -38,7 +39,7 @@ export const HandleAllDepartments = async (req, res) => {
 export const HandleDepartment = async (req, res) => {
     try {
         const { departmentID } = req.params
-        const department = await Department.findById(departmentID)
+        const department = await Department.findOne({ _id: departmentID, organizationID: req.ORGID })
 
         if (!department) {
             return res.status(404).json({ success: false, message: "Department not found" })
@@ -54,7 +55,7 @@ export const HandleUpdateDepartment = async (req, res) => {
     try {
         const { departmentID, UpdatedDepartment, employeeIDArray } = req.body
 
-        const SelectedDepartment = await Department.findById(departmentID)
+        const SelectedDepartment = await Department.findOne({ _id: departmentID, organizationID: req.ORGID })
 
         if (!SelectedDepartment) {
             return res.status(404).json({ success: false, message: "Department not found" })
@@ -62,7 +63,7 @@ export const HandleUpdateDepartment = async (req, res) => {
 
         if (employeeIDArray) {
 
-            const employees = SelectedDepartment.employees 
+            const employees = SelectedDepartment.employees
 
             const SelectedEmployees = []
             const RejectedEmployees = []
@@ -78,7 +79,7 @@ export const HandleUpdateDepartment = async (req, res) => {
 
             if (RejectedEmployees.length > 0) {
                 return res.status(400).json({ success: false, message: `Some Employees Are Already Belongs To ${SelectedDepartment.name} Department`, EmployeeList: RejectedEmployees })
-            } 
+            }
 
             for (let index = 0; index < SelectedEmployees.length; index++) {
                 employees.push(SelectedEmployees[index])
@@ -105,7 +106,7 @@ export const HandleDeleteDepartment = async (req, res) => {
 
         if (action === "delete-department") {
 
-            const department = await Department.findById(departmentID)
+            const department = await Department.findOne({ _id: departmentID, organizationID: req.ORGID })
 
             if (!department) {
                 return res.status(404).json({ success: false, message: "Department not found" })

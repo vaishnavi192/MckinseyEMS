@@ -26,11 +26,17 @@ const BalanceSchema = new Schema({
         type: Date,
         default: new Date()
     },
-    organizationID : {
+    organizationID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Organization"
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "HumanResources"
     }
 },
-{
-    timestamps: true
-})
+    {
+        timestamps: true
+    })
+
+export const Balance = mongoose.model("Balance", BalanceSchema)

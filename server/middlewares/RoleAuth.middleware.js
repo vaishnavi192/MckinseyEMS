@@ -4,5 +4,5 @@ export const RoleAuthorization = (...AuthRoles) => {
             return res.status(403).json({ success : false, message: "You are not athourized to access this route" });
         }
         next();
-    }
+    } 
 }

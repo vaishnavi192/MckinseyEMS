@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
-export const GenerateJwtTokenAndSetCookiesEmployee = (res, EMid, EMrole) => {
-    const token = jwt.sign({ EMid, EMrole }, process.env.JWT_SECRET, { expiresIn: '7d' })
+export const GenerateJwtTokenAndSetCookiesEmployee = (res, EMid, EMrole, ORGID) => {
+    const token = jwt.sign({ EMid, EMrole, ORGID }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
     res.cookie("EMtoken", token, {
         maxAge: 7 * 24 * 60 * 60 * 1000,

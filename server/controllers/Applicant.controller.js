@@ -8,7 +8,7 @@ export const HandleCreateApplicant = async (req, res) => {
             throw new Error("All fields are required")
         }
 
-        const applicant = await Applicant.findOne({ email: email })
+        const applicant = await Applicant.findOne({ email: email, organizationID: req.ORGID })
 
         if (applicant) {
             return res.status(409).json({ success: false, message: "Applicant already exists" })
@@ -19,7 +19,8 @@ export const HandleCreateApplicant = async (req, res) => {
             lastname,
             email,
             contactnumber,
-            appliedrole
+            appliedrole,
+            organizationID: req.ORGID
         })
 
         res.status(201).json({ success: true, message: "Applicant created successfully", data: newApplicant })
@@ -30,7 +31,7 @@ export const HandleCreateApplicant = async (req, res) => {
 
 export const HandleAllApplicants = async (req, res) => {
     try {
-        const applicants = await Applicant.find({})
+        const applicants = await Applicant.find({ organizationID: req.ORGID })
         return res.status(200).json({ success: true, message: "All Applicants Found Successfully", data: applicants })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
@@ -40,7 +41,7 @@ export const HandleAllApplicants = async (req, res) => {
 export const HandleApplicant = async (req, res) => {
     try {
         const { applicantID } = req.params
-        const applicant = await Applicant.findById(applicantID)
+        const applicant = await Applicant.findOne({ _id: applicantID, organizationID: req.ORGID })
 
         if (!applicant) {
             return res.status(404).json({ success: false, message: "Applicant not found" })

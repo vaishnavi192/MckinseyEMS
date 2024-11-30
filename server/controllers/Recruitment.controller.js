@@ -9,7 +9,7 @@ export const HandleCreateRecruitment = async (req, res) => {
             return res.status(400).json({ success: false, message: "All fields are required" })
         }
 
-        const recruitment = await Recruitment.findOne({ jobtitle: jobtitle })
+        const recruitment = await Recruitment.findOne({ jobtitle: jobtitle, organizationID: req.ORGID })
 
         if (recruitment) {
             return res.status(409).json({ success: false, message: "Recruitment already exists for this job title" })
@@ -18,6 +18,7 @@ export const HandleCreateRecruitment = async (req, res) => {
         const newRecruitment = await Recruitment.create({
             jobtitle,
             description,
+            organizationID: req.ORGID
         })
 
         return res.json({ success: true, message: "Recruitment created successfully", data: newRecruitment })
@@ -29,7 +30,7 @@ export const HandleCreateRecruitment = async (req, res) => {
 
 export const HandleAllRecruitments = async (req, res) => {
     try {
-        const recruitments = await Recruitment.find({}).populate("application")
+        const recruitments = await Recruitment.find({ organizationID: req.ORGID }).populate("application")
         return res.status(200).json({ success: true, message: "All recruitments retrieved successfully", data: recruitments })
     } catch (error) {
         return res.status(500).json({ success: false, message: error.message })
@@ -44,7 +45,7 @@ export const HandleRecruitment = async (req, res) => {
             return res.status(400).json({ success: false, message: "Recruitment ID is required" })
         }
 
-        const recruitment = await Recruitment.findById(recruitmentID).populate("application")
+        const recruitment = await Recruitment.findOne({ _id: recruitmentID, organizationID: req.ORGID }).populate("application")
         return res.status(200).json({ success: true, message: "Recruitment retrieved successfully", data: recruitment })
     } catch (error) {
         return res.status(404).json({ success: false, message: "Recruitment not found" })
@@ -59,7 +60,7 @@ export const HandleUpdateRecruitment = async (req, res) => {
             return res.status(400).json({ success: false, message: "All fields are required" })
         }
 
-        const recruitment = await Recruitment.findById(recruitmentID)
+        const recruitment = await Recruitment.findOne({ _id: recruitmentID, organizationID: req.ORGID })
 
         if (!recruitment) {
             return res.status(404).json({ success: false, message: "Recruitment not found" })
