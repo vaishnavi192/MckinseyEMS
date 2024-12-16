@@ -9,8 +9,7 @@ export const HandleCreateBalance = async (req, res) => {
         }
 
         const balance = await Balance.findOne({
-            title,
-            description,
+            expensemonth,
         })
 
         if (balance) {

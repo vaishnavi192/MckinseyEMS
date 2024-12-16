@@ -9,6 +9,8 @@ import { ResetMailConfirmPage } from "../pages/HumanResources/resetmailconfirm.j
 import { ResetHRPasswordPage } from "../pages/HumanResources/resetpassword.jsx"
 import { ResetHRVerifyEmailPage } from "../pages/HumanResources/resetemail.jsx"
 import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashboardpage.jsx"
+import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
+import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
 
 export const HRRoutes = [
     {
@@ -20,12 +22,16 @@ export const HRRoutes = [
         element: <HRLogin />
     },
     {
-        path: "/auth/HR/dashboard",
+        path: "/HR/dashboard",
         element: <HRDashbaord />,
         children: [
             {
-                path: "/auth/HR/dashboard/dashboard-data",
+                path: "/HR/dashboard/dashboard-data",
                 element: <HRDashboardPage />
+            },
+            {
+                path: "/HR/dashboard/employees",
+                element: <HREmployeesPage /> 
             }
         ]
     },

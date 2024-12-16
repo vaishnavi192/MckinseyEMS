@@ -8,25 +8,25 @@ import { Organization } from "../models/Organization.model.js"
 
 
 export const HandleEmplyoeeSignup = async (req, res) => {
-    const { firstname, lastname, email, password, contactnumber, OrganizationName, OrganizationURL } = req.body
+    const { firstname, lastname, email, password, contactnumber } = req.body
     try {
 
-        if (!firstname || !lastname || !email || !password || !contactnumber || !OrganizationName || !OrganizationURL) {
+        if (!firstname || !lastname || !email || !password || !contactnumber) {
             throw new Error("All Fields are required")
         }
 
-        const organization = await Organization.findOne({ name: OrganizationName, OrganizationURL: OrganizationURL })
+        const organization = await Organization.findOne({ _id: req.ORGID })
 
         if (!organization) {
             return res.status(404).json({ success: false, message: "Organization or Company not found" })
         }
 
         try {
-            const checkEmployee = await Employee.findOne({ email: email })
+            // const checkEmployee = await Employee.findOne({ email: email })
 
-            if (checkEmployee) {
-                return res.status(400).json({ success: false, message: `Employee already exists, please go to the login page or create new employee` })
-            }
+            // if (checkEmployee) {
+            //     return res.status(400).json({ success: false, message: `Employee already exists, please go to the login page or create new employee` })
+            // }
 
             const hashedPassword = await bcrypt.hash(password, 10)
             const verificationcode = GenerateVerificationToken(6)
@@ -46,10 +46,11 @@ export const HandleEmplyoeeSignup = async (req, res) => {
             organization.employees.push(newEmployee._id)
             await organization.save()
 
-            GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role, organization._id)
-            const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
+            // GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role, organization._id)
+            // const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
+            // SendVerificationEmailStatus: VerificationEmailStatus
 
-            return res.status(201).json({ success: true, message: "Employee Registered Successfully", SendVerificationEmailStatus: VerificationEmailStatus, newEmployee: newEmployee.email })
+            return res.status(201).json({ success: true, message: "Employee Registered Successfully", newEmployee: newEmployee.email, type: "EmployeeCreate" })
 
         } catch (error) {
             res.status(400).json({ success: false, message: "Oops! Something went wrong", error: error });
@@ -214,7 +215,7 @@ export const HandleEmplyoeeSetPassword = async (req, res) => {
 
 export const HandleEmployeeCheckVerifyEmail = async (req, res) => {
     try {
-        const employee = await Employee.findOne({ _id: req.EMid, organizationID : req.ORGID})
+        const employee = await Employee.findOne({ _id: req.EMid, organizationID: req.ORGID })
 
         if (!employee) {
             return res.status(404).json({ success: false, message: "Employee not found", type: "Employeecodeavailable" })

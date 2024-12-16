@@ -7,10 +7,8 @@ import { GenerateVerificationToken } from "../utils/generateverificationtoken.js
 import { Organization } from "../models/Organization.model.js"
 
 export const HandleHRSignup = async (req, res) => {
-    const { HRAuthData, OrganizationData } = req.body
     try {
-        const { name, description, OrganizationURL, OrganizationMail } = OrganizationData
-        const { firstname, lastname, email, password, contactnumber } = HRAuthData
+        const { firstname, lastname, email, password, contactnumber, name, description, OrganizationURL, OrganizationMail } = req.body
 
         if (!name || !description || !OrganizationURL || !OrganizationMail) {
             throw new Error("All Fields are required")
@@ -183,7 +181,7 @@ export const HandleHRForgotPassword = async (req, res) => {
     }
 }
 
-export const HandleHRResetPassword = async (req, res) => { 
+export const HandleHRResetPassword = async (req, res) => {
     const { token } = req.params
     const { password } = req.body
 
@@ -215,7 +213,7 @@ export const HandleHRResetPassword = async (req, res) => {
 export const HandleHRResetverifyEmail = async (req, res) => {
     const { email } = req.body
     try {
-        const HR = await HumanResources.findOne({ email: email, _id: req.HRid, organizationID: ORGID })
+        const HR = await HumanResources.findOne({ email: email, _id: req.HRid, organizationID: req.ORGID })
 
         if (!HR) {
             return res.status(404).json({ success: false, message: "HR Email Does Not Exist, Please Enter Correct Email", type: "HRResendVerifyEmail" })

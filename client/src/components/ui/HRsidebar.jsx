@@ -23,7 +23,8 @@ export function HRdashboardSidebar() {
 
                         <SidebarMenu className="gap-3 p-2">
 
-                            <NavLink to={"/auth/HR/dashboard/dashboard-data"} className={({ isActive }) => { return isActive ? "bg-blue-200 rounded-lg" : "" }}>
+
+                            <NavLink to={"/HR/dashboard/dashboard-data"} className={({ isActive }) => { return isActive ? "bg-blue-200 rounded-lg" : "" }}>
 
                                 <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg">
                                     <img src="/../../src/assets/HR-Dashboard/dashboard.png" alt="" className="w-7 ms-2 my-1" />
@@ -32,21 +33,22 @@ export function HRdashboardSidebar() {
 
                             </NavLink>
 
-                            {/* <NavLink to={"/auth/HR/dashboard/dashboard-data"} className={({ isActive }) => { return isActive ? "bg-blue-200 rounded-lg" : "" }}> */}
 
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg">
-                                    <img src="/../../src/assets/HR-Dashboard/employee-2.png" alt="" className="w-7 ms-2 my-1" />
-                                    <button className="text-[16px]">Employees</button>
-                                </SidebarMenuItem>
+                            <NavLink to={"/HR/dashboard/employees"} className={({ isActive }) => { return isActive ? "bg-blue-200 rounded-lg" : "" }}>
 
-                            {/* </NavLink> */}
+                            <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg">
+                                <img src="/../../src/assets/HR-Dashboard/employee-2.png" alt="" className="w-7 ms-2 my-1" />
+                                <button className="text-[16px]">Employees</button>
+                            </SidebarMenuItem>
+
+                            </NavLink>
 
 
                             <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg">
-                                
-                                    <img src="/../../src/assets/HR-Dashboard/department.png" alt="" className="w-7 ms-2 my-1" />
-                                    <button className="text-[16px]">Departments</button>
-    
+
+                                <img src="/../../src/assets/HR-Dashboard/department.png" alt="" className="w-7 ms-2 my-1" />
+                                <button className="text-[16px]">Departments</button>
+
                             </SidebarMenuItem>
 
                             <SidebarMenuItem className="my-1">

@@ -17,7 +17,7 @@ export const ResetHRVerifyEmailPage = () => {
 
     const handleverifybutton = () => {
         loadingbar.current.continuousStart();
-        dispatch(HandlePostHumanResources({ apiroute: "RESEND_VERIFY_EMAIL", data: emailvalue }))
+        dispatch(HandlePostHumanResources({ apiroute: "RESEND_VERIFY_EMAIL", data: emailvalue })) 
     }
 
     const handleverifyemail = (event) => {

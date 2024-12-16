@@ -9,7 +9,7 @@ export const ErrorPopup = ({ error }) => {
                     </div>
                     <div className="error-content">
                         <p className="">{error}</p>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </>

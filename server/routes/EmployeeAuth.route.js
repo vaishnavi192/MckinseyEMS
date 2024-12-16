@@ -22,7 +22,7 @@ router.post("/forgot-password", VerifyEmployeeToken, HandleEmplyoeeForgotPasswor
 
 router.post("/reset-password/:token", HandleEmplyoeeSetPassword)
 
-router.get("/check-verify-email", VerifyEmployeeToken, HandleEmployeeCheckVerifyEmail)
+router.get("/check-verify-email", VerifyEmployeeToken, HandleEmployeeCheckVerifyEmail) 
 
 
 export default router

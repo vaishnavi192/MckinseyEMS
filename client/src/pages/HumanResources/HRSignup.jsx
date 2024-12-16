@@ -19,7 +19,11 @@ export const HRSignupPage = () => {
         email: "",
         contactnumber: "",
         password: "",
-        textpassword: ""
+        textpassword: "",
+        name : "", 
+        description : "", 
+        OrganizationURL : "", 
+        OrganizationMail : ""
     })
 
     const handlesignupform = (event) => {
@@ -52,7 +56,7 @@ export const HRSignupPage = () => {
 
         if (HRState.isAuthenticated && HRState.isVerified) {
             loadingbar.current.complete()
-            navigate("/auth/HR/dashboard")
+            navigate("/HR/dashboard/dashboard-data")
         }
 
         if (HRState.isAuthenticated && !HRState.isVerified) {
@@ -62,10 +66,10 @@ export const HRSignupPage = () => {
     }, [HRState.isAuthenticated, HRState.isVerified])
 
     // console.log(signupform)
-    console.log(HRState)
+    // console.log(HRState)
 
     return (
-        <div className="HRsignup-page-container h-[100vh] flex justify-center items-center">
+        <div className="HRsignup-page-container h-screen flex justify-center min-[900px]:justify-center min-[900px]:items-center">
             <LoadingBar ref={loadingbar} />
             <SignUP stateformdata={signupform} handlesignupform={handlesignupform} handlesubmitform={handlesubmitform} errorpopup={errorpopup} />
         </div>

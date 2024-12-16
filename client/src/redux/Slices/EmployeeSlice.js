@@ -5,7 +5,7 @@ import { HandlePostEmployees, HandleGetEmployees } from "../Thunks/EmployeeThunk
 const EmployeeSlice = createSlice({
     name: 'employees',
     initialState: {
-        data: null,
+        data: null, 
         isLoading: false,
         isAuthenticated: false,
         isAuthourized: false,

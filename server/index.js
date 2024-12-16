@@ -38,7 +38,7 @@ app.use("/api/auth/employee", EmployeeAuthRouter)
 
 app.use("/api/auth/HR", HRAuthrouter)
 
-app.use("/api/v1/dashboard", DashboardRouter)
+app.use("/api/v1/dashboard", DashboardRouter) 
 
 app.use("/api/v1/employee", EmployeeRouter)
 

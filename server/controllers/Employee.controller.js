@@ -4,8 +4,8 @@ import { Organization } from "../models/Organization.model.js"
 
 export const HandleAllEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find({ organizationID: req.ORGID }).select("firstname lastname email contactnumber")
-        return res.status(200).json({ success: true, data: employees })
+        const employees = await Employee.find({ organizationID: req.ORGID }).select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified")
+        return res.status(200).json({ success: true, data: employees, type: "AllEmployees" })
     } catch (error) {
         return res.status(500).json({ success: false, error: error, message: "internal server error" })
     }
@@ -20,10 +20,10 @@ export const HandleEmployeeByHR = async (req, res) => {
             return res.status(404).json({ success: false, message: "employee not found" })
         }
         
-        return res.status(200).json({ success: true, data: employee })
+        return res.status(200).json({ success: true, data: employee, type: "GetEmployee" })
     }
     catch (error) {
-        return res.status(404).json({ success: false, error: error, message: "employee not found" })
+        return res.status(404).json({ success: false, error: error, message: "employee not found" }) 
     }
 }
 
@@ -62,7 +62,7 @@ export const HandleEmployeeUpdate = async (req, res) => {
 
 export const HandleEmployeeDelete = async (req, res) => {
     try {
-        const { employeeId } = req.body
+        const { employeeId } = req.params
         const employee = await Employee.findOne({ _id: employeeId })
 
         if (!employee) {
@@ -87,7 +87,7 @@ export const HandleEmployeeDelete = async (req, res) => {
         await organization.save()
         await employee.deleteOne()
 
-        return res.status(200).json({ success: true, message: "Employee deleted successfully" })
+        return res.status(200).json({ success: true, message: "Employee deleted successfully", type : "EmployeeDelete" })
     } catch (error) {
         return res.status(500).json({ success: false, error: error, message: "internal server error" })
     }

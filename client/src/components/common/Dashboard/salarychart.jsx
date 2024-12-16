@@ -15,21 +15,19 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-export const SalaryChart = () => {
-    const chartData = [
-        { month: "January", SalriesPaid: 250000, AvailableAmount: 800000 },
-        { month: "February", SalriesPaid: 300000, AvailableAmount: 500000 },
-        { month: "March", SalriesPaid: 300000, AvailableAmount: 700000 },
-        { month: "April", SalriesPaid: 350000, AvailableAmount: 350000 },
-        { month: "May", SalriesPaid: 350000, AvailableAmount: 800000 },
-        { month: "June", SalriesPaid: 300000, AvailableAmount: 500000 },
-        { month: "July", SalriesPaid: 300000, AvailableAmount: 600000 },
-        { month: "August", SalriesPaid: 350000, AvailableAmount: 250000 },
-        { month: "September", SalriesPaid: 200000, AvailableAmount: 550000 },
-        { month: "October", SalriesPaid: 350000, AvailableAmount: 50000 },
-        { month: "November", SalriesPaid: 350000, AvailableAmount: 600000 },
-        { month: "December", SalriesPaid: 450000, AvailableAmount: 250000 },
-    ]
+export const SalaryChart = ({ balancedata }) => {
+    const chartData = []
+    if (balancedata) {
+        for (let index = 0; index < balancedata.balance.length; index++) {
+            chartData.push(
+                {
+                    month: balancedata.balance[index]["expensemonth"],
+                    SalriesPaid: balancedata.balance[index]["totalexpenses"],
+                    AvailableAmount: balancedata.balance[index]["availableamount"]
+                }
+            )
+        }
+    }
     const chartConfig = {
         desktop: {
             label: "Salaries Paid",
@@ -41,12 +39,21 @@ export const SalaryChart = () => {
         },
     }
 
+    let trendingUp = 0
+
+    if (balancedata) {
+        const difference = chartData[chartData.length - 1]["AvailableAmount"] - chartData[chartData.length - 2]["AvailableAmount"]
+        trendingUp += Math.round((difference * 100) / chartData[chartData.length - 2]["AvailableAmount"])
+    }
     return (
-        // <div>
-            <Card>
+        <div className="salary-container flex flex-col min-[250px]:gap-3 sm:gap-1 h-auto">
+            <div className="heading px-2 my-2 min-[250px]:px-3">
+                <h1 className="min-[250px]:text-xl xl:text-3xl font-bold min-[250px]:text-center sm:text-start">Balance Chart</h1>
+            </div>
+            <Card className="mx-2">
                 <CardHeader>
-                    <CardTitle>Available Salary Amount : 250000</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">Available Salary Amount : {chartData.length > 0 ? chartData[chartData.length - 1]["AvailableAmount"] : 0}</CardTitle>
+                    <CardDescription className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">
                         Salaries Chart
                     </CardDescription>
                 </CardHeader>
@@ -71,7 +78,7 @@ export const SalaryChart = () => {
                             <ChartTooltip
                                 cursor={false}
                                 content={<ChartTooltipContent indicator="line" className="p-2" />}
-                                className="p-2 flex gap-3 items-center"
+                                className="p-[2px] flex gap-1 items-center min-[250px]:text-xs sm:text-xs"
                             />
                             <Area
                                 dataKey="SalriesPaid"
@@ -97,15 +104,16 @@ export const SalaryChart = () => {
                     <div className="flex w-full items-start gap-2 text-sm">
                         <div className="grid gap-2">
                             <div className="flex items-center gap-2 font-medium leading-none">
-                                Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+                                Trending up by {trendingUp} % this month
+                                <TrendingUp className="h-4 w-4" />
                             </div>
                             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                                January - June 2024
+                                {chartData.length > 0 ? `${chartData[0]["month"]} 2024 - ${chartData[chartData.length - 1]["month"]} 2024` : null}
                             </div>
                         </div>
                     </div>
                 </CardFooter>
             </Card>
-        
+        </div>
     )
 }

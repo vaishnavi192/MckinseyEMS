@@ -23,7 +23,7 @@ export const VerifyEmployeeToken = (req, res, next) => {
 export const VerifyhHRToken = (req, res, next) => {
     const token = req.cookies.HRtoken
     if (!token) {
-        return res.status(401).json({ success: false, message: "Unauthorized access", gologin : true })
+        return res.status(401).json({ success: false, message: "Unauthorized access", gologin : true }) 
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET) 

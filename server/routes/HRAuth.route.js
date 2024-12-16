@@ -9,7 +9,7 @@ router.post("/signup", HandleHRSignup)
 
 router.post("/verify-email", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleHRVerifyEmail)
 
-router.post("/resend-verify-email",VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleHRResetverifyEmail)
+router.post("/resend-verify-email", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleHRResetverifyEmail)
 
 router.post("/login", HandleHRLogin)
 

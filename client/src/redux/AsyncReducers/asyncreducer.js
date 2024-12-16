@@ -43,6 +43,7 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
+                state.isAuthourized = true
                 state.isVerifiedEmailAvailable = true
                 state.error.status = false;
                 state.data = action.payload;
@@ -51,6 +52,7 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
+                state.isAuthourized = true
                 state.error.status = false;
                 state.data = action.payload;
             }
@@ -58,6 +60,7 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.isSignUp = true
                 state.isLoading = false;
                 state.isAuthenticated = true
+                state.isAuthourized = true
                 state.isVerifiedEmailAvailable = false
                 state.isVerified = true
                 state.error.status = false;
@@ -126,4 +129,67 @@ export const HRAsyncReducer = (builder, thunk) => {
                 state.error.content = action.payload
             }
         });
+}
+
+
+export const HRDashboardAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    })
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error.status = false;
+        state.data = action.payload.data;
+        state.success = action.payload.success
+    })
+    builder.addCase(thunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload.message
+        state.error.content = action.payload;
+    })
+}
+
+export const HREmployeesPageAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    })
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        if (action.payload.type === "AllEmployees") {
+            state.isLoading = false;
+            state.error.status = false;
+            state.error.message = null
+            state.error.content = null;
+            state.data = action.payload.data;
+            state.success = action.payload.success
+            state.fetchData = false
+        }
+        else if (action.payload.type === "EmployeeCreate" || action.payload.type === "EmployeeDelete") {
+            console.log("this is the employee data", action.payload)
+            state.isLoading = false;
+            state.error.status = false;
+            state.error.message = null
+            state.error.content = null;
+            state.data = action.payload.data;
+            state.success = action.payload.success;
+            state.fetchData = true
+        }
+        else if (action.payload.type === "GetEmployee") {
+            state.isLoading = false;
+            state.error.status = false;
+            state.error.message = null
+            state.error.content = null;
+            state.employeeData = action.payload.data
+        }
+    })
+    builder.addCase(thunk.rejected, (state, action) => {
+        console.log(action)
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload.message
+        state.success = action.payload.success;
+        state.error.content = action.payload;
+    })
 }
