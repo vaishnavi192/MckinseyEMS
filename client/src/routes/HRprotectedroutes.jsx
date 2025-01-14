@@ -10,8 +10,6 @@ export const HRProtectedRoutes = ({ children }) => {
     const dispatch = useDispatch()
     const HRState = useSelector((state) => state.HRReducer)
 
-    console.log(HRState)
-
     useEffect(() => {
         if (!HRState.isAuthenticated && !HRState.isAuthourized && !HRState.isVerified && !HRState.error.content) {
             dispatch(HandleGetHumanResources({ apiroute: "CHECKLOGIN" }))
@@ -23,7 +21,6 @@ export const HRProtectedRoutes = ({ children }) => {
         }
 
         if (!HRState.isAuthenticated && !HRState.isAuthourized && !HRState.isVerified && HRState.error.content) {
-            console.log("this is now this is")
             navigate("/auth/HR/signup")
         }
     }, [HRState.isAuthenticated, HRState.isAuthourized, HRState.isVerified, HRState.error.content])

@@ -21,7 +21,7 @@ export const HandleCreateDepartment = async (req, res) => {
             organizationID: req.ORGID
         })
 
-        return res.status(200).json({ success: true, message: "Department created successfully", department: newDepartment })
+        return res.status(200).json({ success: true, message: "Department created successfully", data: newDepartment, type: "CreateDepartment" })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal server error" })
     }
@@ -29,8 +29,9 @@ export const HandleCreateDepartment = async (req, res) => {
 
 export const HandleAllDepartments = async (req, res) => {
     try {
-        const departments = await Department.find({ organizationID: req.ORGID })
-        return res.status(200).json({ success: true, message: "All departments retrieved successfully", departments: departments })
+        const departments = await Department.find({ organizationID: req.ORGID }).populate("employees notice HumanResources", "firstname lastname email contactnumber title audience createdby")
+
+        return res.status(200).json({ success: true, message: "All departments retrieved successfully", data: departments, type: "AllDepartments" })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal server error" })
     }
@@ -45,7 +46,9 @@ export const HandleDepartment = async (req, res) => {
             return res.status(404).json({ success: false, message: "Department not found" })
         }
 
-        return res.status(200).json({ success: true, message: department.name, department: department })
+        return res.status(200).json({
+            success: true, message: department.name, data: department, type: "GetDepartment"
+        })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal server error" })
     }
@@ -88,11 +91,11 @@ export const HandleUpdateDepartment = async (req, res) => {
             await Employee.updateMany({ _id: { $in: SelectedEmployees } }, { $set: { department: departmentID } }) // interesting
             await SelectedDepartment.save()
 
-            return res.status(200).json({ success: true, message: `Employees Added Successfully to ${SelectedDepartment.name} Department`, data: SelectedDepartment })
+            return res.status(200).json({ success: true, message: `Employees Added Successfully to ${SelectedDepartment.name} Department`, data: SelectedDepartment, type: "DepartmentEMUpdate" })
         }
 
         const department = await Department.findByIdAndUpdate(departmentID, UpdatedDepartment, { new: true })
-        return res.status(200).json({ success: true, message: "Department updated successfully", data: department })
+        return res.status(200).json({ success: true, message: "Department updated successfully", data: department, type: "DepartmentDEUpdate" })
 
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal server error" })
@@ -135,7 +138,7 @@ export const HandleDeleteDepartment = async (req, res) => {
 
             await Employee.updateMany({ _id: { $in: employeeIDArray } }, { $set: { department: null } })
 
-            return res.status(200).json({ success: true, message: "Employee deleted successfully" })
+            return res.status(200).json({ success: true, message: "Employee deleted successfully", type: "RemoveEmployeeDE" })
         }
 
 

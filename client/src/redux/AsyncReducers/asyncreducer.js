@@ -167,7 +167,6 @@ export const HREmployeesPageAsyncReducer = (builder, thunk) => {
             state.fetchData = false
         }
         else if (action.payload.type === "EmployeeCreate" || action.payload.type === "EmployeeDelete") {
-            console.log("this is the employee data", action.payload)
             state.isLoading = false;
             state.error.status = false;
             state.error.message = null
@@ -191,5 +190,74 @@ export const HREmployeesPageAsyncReducer = (builder, thunk) => {
         state.error.message = action.payload.message
         state.success = action.payload.success;
         state.error.content = action.payload;
+    })
+}
+
+export const HRDepartmentPageAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    })
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        if (action.payload.type === "AllDepartments") {
+            state.isLoading = false;
+            state.error.status = false;
+            state.error.message = null
+            state.error.content = null;
+            state.data = action.payload.data;
+            state.fetchData = false
+            state.success.status = false
+            state.success.message = null
+            state.success.content = null
+        }
+        else if (action.payload.type === "CreateDepartment" || 
+            action.payload.type === "DepartmentDelete" || 
+            action.payload.type === "DepartmentEMUpdate" || 
+            action.payload.type === "RemoveEmployeeDE") 
+            {
+            state.isLoading = false;
+            state.error.status = false;
+            state.error.message = null
+            state.error.content = null;
+            state.success.status = action.payload.success;
+            state.success.message = action.payload.message;
+            state.success.content = action.payload;
+            state.fetchData = true
+        }
+        else if (action.payload.type === "GetDepartment") {
+            state.isLoading = false;
+            state.error.status = false;
+            state.error.message = null
+            state.error.content = null;
+            state.departmentData = action.payload.data
+        }
+    })
+    builder.addCase(thunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload.message
+        state.success = action.payload.success;
+        state.error.content = action.payload;
+    })
+}
+
+
+export const EmployeesIDsAsyncReducer = (builder, thunk) => {
+    builder.addCase(thunk.pending, (state) => {
+        state.isLoading = true;
+        state.error.content = null;
+    })
+    builder.addCase(thunk.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error.message = null;
+        state.error.content = null
+        state.error.status = false;
+        state.data = action.payload.data;
+    })
+    builder.addCase(thunk.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error.status = true;
+        state.error.message = action.payload.message
+        state.error.content = action.payload
     })
 }

@@ -11,7 +11,7 @@ import { ResetHRVerifyEmailPage } from "../pages/HumanResources/resetemail.jsx"
 import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashboardpage.jsx"
 import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
 import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
-
+import { HRDepartmentPage } from "../pages/HumanResources/Dashboard Childs/departmentpage.jsx"
 export const HRRoutes = [
     {
         path: "/auth/HR/signup",
@@ -31,7 +31,11 @@ export const HRRoutes = [
             },
             {
                 path: "/HR/dashboard/employees",
-                element: <HREmployeesPage /> 
+                element: <HREmployeesPage />
+            },
+            {
+                path: "/HR/dashboard/departments",
+                element: <HRDepartmentPage />
             }
         ]
     },

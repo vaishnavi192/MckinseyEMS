@@ -34,7 +34,7 @@ export const HandleDeleteHREmployees = createAsyncThunk("HandleDeleteHREmployees
         const RouteArray = apiroute.split(".")
         if (RouteArray.length > 0) {
             const response = await apiService.delete(`${HREmployeesPageEndPoints[RouteArray[0]](RouteArray[1])}`, {
-                withCredentials: true
+                withCredentials : true
             })
             return response.data
         }

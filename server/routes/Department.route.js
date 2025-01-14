@@ -7,13 +7,13 @@ const router = express.Router()
 
 router.post("/create-department", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleCreateDepartment)
 
-router.get("/all", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleAllDepartments)
+router.get("/all", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleAllDepartments) 
 
 router.get("/:departmentID", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleDepartment)
 
 router.patch("/update-department", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleUpdateDepartment)
 
-router.delete("/delete-department", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleDeleteDepartment)
+router.delete("/delete-department", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleDeleteDepartment) 
 
 
-export default router
+export default router 

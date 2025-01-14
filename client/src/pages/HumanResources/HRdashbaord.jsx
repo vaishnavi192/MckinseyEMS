@@ -10,7 +10,7 @@ export const HRDashbaord = () => {
     const navigate = useNavigate()
     const pathArray = location.pathname.split("/")
 
-    
+
     useEffect(() => {
         navigate(`/HR/dashboard/${pathArray[pathArray.length - 1]}`)
     }, [])
@@ -25,10 +25,12 @@ export const HRDashbaord = () => {
             <div className="HRDashboard-sidebar">
                 <SidebarProvider>
                     <HRdashboardSidebar />
-                    <SidebarTrigger />
+                    <div className="sidebar-container min-[250px]:absolute md:relative">
+                        <SidebarTrigger />
+                    </div>
                 </SidebarProvider>
             </div>
-            <div className="HRdashboard-container h-screen w-[81.5vw] mx-auto flex flex-col">
+            <div className="HRdashboard-container h-screen w-full min-[250px]:mx-1 md:mx-2 flex flex-col">
                 <Outlet />
             </div>
         </div>

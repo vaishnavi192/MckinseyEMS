@@ -1,11 +1,20 @@
-import { Department } from "../models/Department.model.js"
+import { Department } from "../models/Department.model.js" 
 import { Employee } from "../models/Employee.model.js"
 import { Organization } from "../models/Organization.model.js"
 
 export const HandleAllEmployees = async (req, res) => {
     try {
-        const employees = await Employee.find({ organizationID: req.ORGID }).select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified")
+        const employees = await Employee.find({ organizationID: req.ORGID }).populate("department", "name").select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest isverified")
         return res.status(200).json({ success: true, data: employees, type: "AllEmployees" })
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error, message: "internal server error" })
+    }
+}
+
+export const HandleAllEmployeesIDS = async (req, res) => {
+    try {
+        const employees = await Employee.find({ organizationID: req.ORGID }).populate("department", "name").select("firstname lastname department")
+        return res.status(200).json({ success: true, data: employees, type: "AllEmployeesIDS" })
     } catch (error) {
         return res.status(500).json({ success: false, error: error, message: "internal server error" })
     }

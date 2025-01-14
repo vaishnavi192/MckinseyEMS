@@ -1,9 +1,9 @@
-import { useToast } from "../../hooks/use-toast.js"
+import { useToast } from "../../../hooks/use-toast.js"
 import { Button } from "@/components/ui/button"
 import { ToastAction } from "@/components/ui/toast"
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useRef } from "react"
-import { HandlePostHREmployees } from "../../redux/Thunks/HREmployeesThunk.js"
+import { HandlePostHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
 export const FormSubmitToast = ({ formdata }) => {
     const { toast } = useToast()
     const dispatch = useDispatch()

@@ -13,7 +13,7 @@ export const HREndPoints = {
     CHECK_VERIFY_EMAIL: "/api/auth/HR/check-verify-email",
     RESEND_VERIFY_EMAIL: "/api/auth/HR/resend-verify-email",
     FORGOT_PASSWORD: "/api/auth/HR/forgot-password",
-    RESET_PASSWORD: (token) => `/api/auth/HR/reset-password/${token}`
+    RESET_PASSWORD: (token) => `/api/auth/HR/reset-password/${token}` 
 }
 
 export const DashboardEndPoints = {
@@ -24,5 +24,16 @@ export const HREmployeesPageEndPoints = {
     GETALL: "/api/v1/employee/all",
     ADDEMPLOYEE: "/api/auth/employee/signup",
     GETONE: (EMID) => `/api/v1/employee/by-HR/${EMID}`,
-    DELETE : (EMID) => `/api/v1/employee/delete-employee/${EMID}`
+    DELETE: (EMID) => `/api/v1/employee/delete-employee/${EMID}`
 }
+
+export const HRDepartmentPageEndPoints = {
+    GETALL: "/api/v1/department/all",
+    CREATE: "/api/v1/department/create-department",
+    UPDATE: "/api/v1/department/update-department",
+    DELETE: "/api/v1/department/delete-department"
+}
+
+export const EmployeesIDsEndPoints = {
+    GETALL: "/api/v1/employee/all-employees-ids",
+} 
