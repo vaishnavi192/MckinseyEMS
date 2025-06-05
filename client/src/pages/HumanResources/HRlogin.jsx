@@ -11,6 +11,7 @@ export const HRLogin = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const loadingbar = useRef(null)
+    const [isLoading, setIsLoading] = useState(false)
     const [signinform, setsigninform] = useState({
         email: "",
         password: ""
@@ -20,34 +21,51 @@ export const HRLogin = () => {
         CommonStateHandler(signinform, setsigninform, event)
     }
 
-    const handlesigninsubmit = (e) => {
+    const handlesigninsubmit = async (e) => {
         e.preventDefault();
-        loadingbar.current.continuousStart();
-        dispatch(HandlePostHumanResources({ apiroute: "LOGIN", data: signinform }))
-
-    }
-
-    if (HRState.error.status) {
-        loadingbar.current.complete()
+        setIsLoading(true)
+        if (loadingbar.current) {
+            loadingbar.current.continuousStart();
+        }
+        try {
+            const response = await dispatch(HandlePostHumanResources({ apiroute: "LOGIN", data: signinform })).unwrap()
+            if (response.success) {
+                setIsLoading(false)
+                if (loadingbar.current) {
+                    loadingbar.current.complete()
+                }
+                navigate("/HR/dashboard/dashboard-data")
+            }
+        } catch (error) {
+            setIsLoading(false)
+            if (loadingbar.current) {
+                loadingbar.current.complete()
+            }
+        }
     }
 
     useEffect(() => {
-        if (!HRState.isAuthenticated) {
-            dispatch(HandleGetHumanResources({ apiroute: "CHECKLOGIN" }))
+        if (HRState.error.status) {
+            setIsLoading(false)
+            if (loadingbar.current) {
+                loadingbar.current.complete()
+            }
         }
-
-        if (HRState.isAuthenticated) {
-            loadingbar.current.complete()
-            navigate("/auth/HR/dashboard")
-        }
-    }, [HRState.isAuthenticated])
+    }, [HRState.error.status])
 
 
     return (
         <div>
             <div className="employee-login-content flex justify-center items-center h-[100vh]">
-                <LoadingBar ref={loadingbar} />
-                <SignIn image={"../../src/assets/Employee-Welcome.jpg"} handlesigninform={handlesigninform} handlesigninsubmit={handlesigninsubmit} targetedstate={HRState} statevalue={signinform} redirectpath={"/auth/HR/forgot-password"} />
+                {isLoading && <LoadingBar ref={loadingbar} color="#f11946" />}
+                <SignIn 
+                    image={"../../src/assets/Employee-Welcome.jpg"} 
+                    handlesigninform={handlesigninform} 
+                    handlesigninsubmit={handlesigninsubmit} 
+                    targetedstate={HRState} 
+                    statevalue={signinform} 
+                    redirectpath={"/auth/HR/forgot-password"} 
+                />
             </div>
         </div>
     )

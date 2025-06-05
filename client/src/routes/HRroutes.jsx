@@ -12,6 +12,11 @@ import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashbo
 import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
 import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
 import { HRDepartmentPage } from "../pages/HumanResources/Dashboard Childs/departmentpage.jsx"
+import { HRAttendancePage } from "../pages/HumanResources/Dashboard Childs/attendancepage.jsx"
+import { HRLeavesPage } from "../pages/HumanResources/Dashboard Childs/leavespage.jsx"
+import { HRPayrollPage } from "../pages/HumanResources/Dashboard Childs/payrollpage.jsx"
+import { HROccupancyPage } from "../pages/HumanResources/Dashboard Childs/occupancypage.jsx"
+
 export const HRRoutes = [
     {
         path: "/auth/HR/signup",
@@ -23,19 +28,35 @@ export const HRRoutes = [
     },
     {
         path: "/HR/dashboard",
-        element: <HRDashbaord />,
+        element: <HRProtectedRoutes><HRDashbaord /></HRProtectedRoutes>,
         children: [
             {
-                path: "/HR/dashboard/dashboard-data",
+                path: "dashboard-data",
                 element: <HRDashboardPage />
             },
             {
-                path: "/HR/dashboard/employees",
+                path: "employees",
                 element: <HREmployeesPage />
             },
             {
-                path: "/HR/dashboard/departments",
+                path: "departments",
                 element: <HRDepartmentPage />
+            },
+            {
+                path: "attendance",
+                element: <HRAttendancePage />
+            },
+            {
+                path: "leaves",
+                element: <HRLeavesPage />
+            },
+            {
+                path: "payroll",
+                element: <HRPayrollPage />
+            },
+            {
+                path: "occupancy",
+                element: <HROccupancyPage />
             }
         ]
     },

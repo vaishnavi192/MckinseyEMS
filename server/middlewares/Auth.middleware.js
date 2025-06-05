@@ -8,11 +8,11 @@ export const VerifyEmployeeToken = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET) 
         if (!decoded) {
-            res.clearCookie("EMtoken")
+            res.clearCookie("EMtoken")  
             return res.status(403).json({ success: false, message: "unauthenticated employee", gologin : true }) 
         }
         req.EMid = decoded.EMid
-        req.EMrole = decoded.EMrole
+        req.EMrole = decoded.EMrole 
         req.ORGID = decoded.ORGID
         next()
     } catch (error) {

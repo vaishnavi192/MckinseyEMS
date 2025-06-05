@@ -40,7 +40,7 @@ const EmployeeSchema = new Schema({
     },
     isverified: {
         type: Boolean,
-        default: false
+        default: true
     },
     verificationtoken: {
         type: String

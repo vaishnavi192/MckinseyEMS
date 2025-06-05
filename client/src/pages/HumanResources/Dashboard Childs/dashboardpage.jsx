@@ -6,6 +6,7 @@ import { HandleGetDashboard } from "../../../redux/Thunks/DashboardThunk.js"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { Loading } from "../../../components/common/loading.jsx"
+
 export const HRDashboardPage = () => {
     console.log("Reloaded")
     const DashboardState = useSelector((state) => state.dashboardreducer)
@@ -14,22 +15,26 @@ export const HRDashboardPage = () => {
         {
             image: "/../../src/assets/HR-Dashboard/employee-2.png",
             dataname: "employees",
+            label: "employees",
             path: "/HR/dashboard/employees"
         },
         {
             image: "/../../src/assets/HR-Dashboard/department.png",
             dataname: "departments",
+            label: "departments",
             path: "/HR/dashboard/departments",
         },
         {
             image: "/../../src/assets/HR-Dashboard/leave.png",
             dataname: "leaves",
+            label: "leaves",
             path: "/HR/dashboard/leaves"
         },
         {
-            image: "/../../src/assets/HR-Dashboard/request.png",
-            dataname: "requestes",
-            path: "/HR/dashboard/requestes"
+            image: "/../../src/assets/HR-Dashboard/attendance.png",
+            dataname: "occupancy",
+            label: "occupancy",
+            path: "/HR/dashboard/occupancy"
         }
     ]
 
@@ -42,7 +47,6 @@ export const HRDashboardPage = () => {
             <Loading />
         )
     }
-
 
     return (
         <>

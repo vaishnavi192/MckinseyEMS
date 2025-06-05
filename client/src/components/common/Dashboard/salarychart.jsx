@@ -15,19 +15,74 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+
 export const SalaryChart = ({ balancedata }) => {
+    // Dummy data for sample
+    const dummyData = [
+        {
+            month: "Jan",
+            SalriesPaid: 450000,
+            AvailableAmount: 550000
+        },
+        {
+            month: "Feb",
+            SalriesPaid: 480000,
+            AvailableAmount: 520000
+        },
+        {
+            month: "Mar",
+            SalriesPaid: 460000,
+            AvailableAmount: 540000
+        },
+        {
+            month: "Apr",
+            SalriesPaid: 500000,
+            AvailableAmount: 500000
+        },
+        {
+            month: "May",
+            SalriesPaid: 470000,
+            AvailableAmount: 530000
+        },
+        {
+            month: "Jun",
+            SalriesPaid: 490000,
+            AvailableAmount: 510000
+        }
+    ]
+
     const chartData = []
-    if (balancedata) {
+    let trendingUp = 0
+
+    // Use dummy data if no real data is available
+    if (!balancedata || !balancedata.balance || !Array.isArray(balancedata.balance) || balancedata.balance.length === 0) {
+        chartData.push(...dummyData)
+        // Calculate trending for dummy data
+        const lastIndex = chartData.length - 1
+        const prevIndex = lastIndex - 1
+        const difference = chartData[lastIndex].AvailableAmount - chartData[prevIndex].AvailableAmount
+        trendingUp = Math.round((difference * 100) / chartData[prevIndex].AvailableAmount)
+    } else {
+        // Process real data if available
         for (let index = 0; index < balancedata.balance.length; index++) {
-            chartData.push(
-                {
-                    month: balancedata.balance[index]["expensemonth"],
-                    SalriesPaid: balancedata.balance[index]["totalexpenses"],
-                    AvailableAmount: balancedata.balance[index]["availableamount"]
-                }
-            )
+            const balance = balancedata.balance[index]
+            if (balance && balance.expensemonth && balance.totalexpenses && balance.availableamount) {
+                chartData.push({
+                    month: balance.expensemonth,
+                    SalriesPaid: balance.totalexpenses,
+                    AvailableAmount: balance.availableamount
+                })
+            }
+        }
+
+        if (chartData.length >= 2) {
+            const lastIndex = chartData.length - 1
+            const prevIndex = lastIndex - 1
+            const difference = chartData[lastIndex].AvailableAmount - chartData[prevIndex].AvailableAmount
+            trendingUp = Math.round((difference * 100) / chartData[prevIndex].AvailableAmount)
         }
     }
+
     const chartConfig = {
         desktop: {
             label: "Salaries Paid",
@@ -39,12 +94,6 @@ export const SalaryChart = ({ balancedata }) => {
         },
     }
 
-    let trendingUp = 0
-
-    if (balancedata) {
-        const difference = chartData[chartData.length - 1]["AvailableAmount"] - chartData[chartData.length - 2]["AvailableAmount"]
-        trendingUp += Math.round((difference * 100) / chartData[chartData.length - 2]["AvailableAmount"])
-    }
     return (
         <div className="salary-container flex flex-col min-[250px]:gap-3 sm:gap-1 h-auto">
             <div className="heading px-2 my-2 min-[250px]:px-3">
@@ -52,7 +101,9 @@ export const SalaryChart = ({ balancedata }) => {
             </div>
             <Card className="mx-2">
                 <CardHeader>
-                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">Available Salary Amount : {chartData.length > 0 ? chartData[chartData.length - 1]["AvailableAmount"] : 0}</CardTitle>
+                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">
+                        Available Salary Amount : {chartData.length > 0 ? chartData[chartData.length - 1].AvailableAmount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) : 0}
+                    </CardTitle>
                     <CardDescription className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">
                         Salaries Chart
                     </CardDescription>
@@ -104,11 +155,17 @@ export const SalaryChart = ({ balancedata }) => {
                     <div className="flex w-full items-start gap-2 text-sm">
                         <div className="grid gap-2">
                             <div className="flex items-center gap-2 font-medium leading-none">
-                                Trending up by {trendingUp} % this month
-                                <TrendingUp className="h-4 w-4" />
+                                {chartData.length >= 2 ? (
+                                    <>
+                                        Trending up by {trendingUp} % this month
+                                        <TrendingUp className="h-4 w-4" />
+                                    </>
+                                ) : (
+                                    "Insufficient data for trend calculation"
+                                )}
                             </div>
                             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                                {chartData.length > 0 ? `${chartData[0]["month"]} 2024 - ${chartData[chartData.length - 1]["month"]} 2024` : null}
+                                {chartData.length > 0 ? `${chartData[0].month} 2024 - ${chartData[chartData.length - 1].month} 2024` : null}
                             </div>
                         </div>
                     </div>

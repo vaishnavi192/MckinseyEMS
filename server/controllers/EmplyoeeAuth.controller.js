@@ -10,7 +10,6 @@ import { Organization } from "../models/Organization.model.js"
 export const HandleEmplyoeeSignup = async (req, res) => {
     const { firstname, lastname, email, password, contactnumber } = req.body
     try {
-
         if (!firstname || !lastname || !email || !password || !contactnumber) {
             throw new Error("All Fields are required")
         }
@@ -22,14 +21,7 @@ export const HandleEmplyoeeSignup = async (req, res) => {
         }
 
         try {
-            // const checkEmployee = await Employee.findOne({ email: email })
-
-            // if (checkEmployee) {
-            //     return res.status(400).json({ success: false, message: `Employee already exists, please go to the login page or create new employee` })
-            // }
-
             const hashedPassword = await bcrypt.hash(password, 10)
-            const verificationcode = GenerateVerificationToken(6)
 
             const newEmployee = await Employee.create({
                 firstname: firstname,
@@ -38,19 +30,23 @@ export const HandleEmplyoeeSignup = async (req, res) => {
                 password: hashedPassword,
                 contactnumber: contactnumber,
                 role: "Employee",
-                verificationtoken: verificationcode,
-                verificationtokenexpires: Date.now() + 5 * 60 * 1000,
+                isverified: true, // Auto verify since we removed OTP
                 organizationID: organization._id
             })
 
             organization.employees.push(newEmployee._id)
             await organization.save()
 
-            // GenerateJwtTokenAndSetCookiesEmployee(res, newEmployee._id, newEmployee.role, organization._id)
-            // const VerificationEmailStatus = await SendVerificationEmail(email, verificationcode)
-            // SendVerificationEmailStatus: VerificationEmailStatus
+            // Send welcome email directly since user is auto-verified
+            const SendWelcomeEmailStatus = await SendWelcomeEmail(newEmployee.email, newEmployee.firstname, newEmployee.lastname)
 
-            return res.status(201).json({ success: true, message: "Employee Registered Successfully", newEmployee: newEmployee.email, type: "EmployeeCreate" })
+            return res.status(201).json({ 
+                success: true, 
+                message: "Employee Registered Successfully", 
+                newEmployee: newEmployee.email, 
+                type: "EmployeeCreate",
+                SendWelcomeEmailStatus: SendWelcomeEmailStatus
+            })
 
         } catch (error) {
             res.status(400).json({ success: false, message: "Oops! Something went wrong", error: error });

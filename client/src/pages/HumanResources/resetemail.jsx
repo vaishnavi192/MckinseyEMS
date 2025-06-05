@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 import LoadingBar from 'react-top-loading-bar'
 import { CommonStateHandler } from "../../utils/commonhandler.js"
 import { HandleGetHumanResources, HandlePostHumanResources } from "../../redux/Thunks/HRThunk.js"
+
 export const ResetHRVerifyEmailPage = () => {
     const HRState = useSelector((state) => state.HRReducer)
     const dispatch = useDispatch()
@@ -16,7 +17,9 @@ export const ResetHRVerifyEmailPage = () => {
     })
 
     const handleverifybutton = () => {
-        loadingbar.current.continuousStart();
+        if (loadingbar.current) {
+            loadingbar.current.continuousStart();
+        }
         dispatch(HandlePostHumanResources({ apiroute: "RESEND_VERIFY_EMAIL", data: emailvalue })) 
     }
 
@@ -24,28 +27,35 @@ export const ResetHRVerifyEmailPage = () => {
         CommonStateHandler(emailvalue, setemailvalue, event)
     }
 
-    if (HRState.error.status) {
-        loadingbar.current.complete()
-    }
+    useEffect(() => {
+        if (HRState.error.status && loadingbar.current) {
+            loadingbar.current.complete()
+        }
+    }, [HRState.error.status])
 
     useEffect(() => {
-        if (HRState.isVerified) {
+        if (HRState.isVerified && loadingbar.current) {
             loadingbar.current.complete()
             navigate("/auth/HR/dashboard")
         }
 
-        if (HRState.isVerifiedEmailAvailable) {
+        if (HRState.isVerifiedEmailAvailable && loadingbar.current) {
             loadingbar.current.complete()
             navigate("/auth/HR/verify-email")
         }
-    }, [HRState.isVerified, HRState.isVerifiedEmailAvailable])
+    }, [HRState.isVerified, HRState.isVerifiedEmailAvailable, navigate])
 
     console.log(HRState)
 
     return (
         <>
             <LoadingBar ref={loadingbar} />
-            <ResetVerifyEmailPage handleverifybutton={handleverifybutton} handleverifyemail={handleverifyemail} emailvalue={emailvalue.email} targetstate={HRState}/>
+            <ResetVerifyEmailPage 
+                handleverifybutton={handleverifybutton} 
+                handleverifyemail={handleverifyemail} 
+                emailvalue={emailvalue.email} 
+                targetstate={HRState}
+            />
         </>
     )
 }

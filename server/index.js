@@ -13,7 +13,6 @@ import LeaveRouter from './routes/Leave.route.js'
 import AttendanceRouter from './routes/Attendance.route.js'
 import RecruitmentRouter from './routes/Recuritment.route.js'
 import ApplicantRouter from './routes/Applicant.route.js'
-import InterviewInsightRouter from './routes/InterviewInsights.route.js'
 import GenerateRequestRouter from './routes/GenerateRequest.route.js'
 import CorporateCalendarRouter from './routes/CorporateCalendar.route.js'
 import BalanceRouter from './routes/Balance.route.js'
@@ -29,10 +28,11 @@ app.use(cookieParser())
 
 
 app.use(cors({
-  origin: process.env.CLIENT_URL, // Adjust this to match your front-end origin exactly
-  credentials: true, // This is optional and depends on whether you’re using cookies
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  credentials: true,
 }));
 // app.options('*', cors())
+
 
 app.use("/api/auth/employee", EmployeeAuthRouter) 
 
@@ -57,8 +57,6 @@ app.use("/api/v1/attendance", AttendanceRouter)
 app.use("/api/v1/recruitment", RecruitmentRouter)
 
 app.use("/api/v1/applicant", ApplicantRouter)
-
-app.use("/api/v1/interview-insights", InterviewInsightRouter)
 
 app.use("/api/v1/generate-request", GenerateRequestRouter)
 
