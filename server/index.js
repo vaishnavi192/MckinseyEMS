@@ -17,6 +17,9 @@ import GenerateRequestRouter from './routes/GenerateRequest.route.js'
 import CorporateCalendarRouter from './routes/CorporateCalendar.route.js'
 import BalanceRouter from './routes/Balance.route.js'
 import SlotRouter from './routes/slot.routes.js'
+import OccupancyRouter from './routes/Occupancy.route.js'
+import AttendancePayrollRouter from './routes/AttendancePayroll.route.js'
+import DevAuthRouter from './routes/DevAuth.route.js'
 import { ConnectDB } from './config/connectDB.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors"
@@ -67,7 +70,36 @@ app.use("/api/v1/balance", BalanceRouter)
 
 app.use("/api/v1/slots", SlotRouter)
 
+app.use("/api/occupancy", OccupancyRouter)
+
+app.use("/api/attendance-payroll", AttendancePayrollRouter)
+
+app.use("/api/dev", DevAuthRouter)
+
 app.listen(process.env.PORT, async () => {
-  await ConnectDB()
-  console.log(`Server running on http://localhost:${process.env.PORT}`)
+  console.log(`✅ Server running on http://localhost:${process.env.PORT}`)
+  
+  try {
+    const dbResult = await ConnectDB()
+    
+    if (dbResult.success) {
+      console.log(`✅ MongoDB connected successfully`)
+      console.log(`🚀 All features available`)
+    } else {
+      console.log(`⚠️  MongoDB connection failed: ${dbResult.error}`)
+      console.log(`🔧 Running in DEVELOPMENT MODE`)
+      console.log(`📝 Available development endpoints:`)
+      console.log(`   - Employee Login: POST /api/dev/employee/dev-login`)
+      console.log(`   - HR Login: POST /api/dev/hr/dev-login`)
+      console.log(`   - Available Slots: GET /api/dev/slots/available`)
+      console.log(`   - Booked Slots: GET /api/dev/slots/booked`)
+      console.log(`   - Completed Slots: GET /api/dev/slots/completed`)
+      console.log(`   - Book Slot: POST /api/dev/slots/book/:slotId`)
+      console.log(`   - Complete Slot: POST /api/dev/slots/complete/:slotId`)
+      console.log(`📋 To fix MongoDB: Update IP whitelist in MongoDB Atlas`)
+    }
+  } catch (error) {
+    console.log(`⚠️  MongoDB connection failed: ${error.message}`)
+    console.log(`🔧 Server running in development mode with hardcoded data`)
+  }
 })
