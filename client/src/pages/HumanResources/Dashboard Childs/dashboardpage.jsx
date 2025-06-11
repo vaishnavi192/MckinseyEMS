@@ -38,6 +38,16 @@ export const HRDashboardPage = () => {
         }
     ]
 
+    // Hardcoded dashboard data with realistic healthcare organization values
+    const hardcodedDashboardData = {
+        employees: 247,      // Total healthcare employees
+        departments: 8,      // Medical departments (Emergency, ICU, Surgery, etc.)
+        leaves: 23,         // Current leave requests
+        occupancy: 89,      // Occupancy percentage
+        balance: DashboardState.data?.balance || [],  // Keep balance data from API if available
+        notices: DashboardState.data?.notices || []   // Keep notices data from API if available
+    }
+
     useEffect(() => {
         dispatch(HandleGetDashboard({ apiroute: "GETDATA" }))
     },[])
@@ -50,7 +60,10 @@ export const HRDashboardPage = () => {
 
     return (
         <>
-            <KeyDetailBoxContentWrapper imagedataarray={DataArray} data={DashboardState.data} />
+            <KeyDetailBoxContentWrapper 
+                imagedataarray={DataArray} 
+                data={hardcodedDashboardData} 
+            />
             <div className="salary-notices-container h-3/4 grid min-[250px]:grid-cols-1 lg:grid-cols-2 min-[250px]:gap-3 xl:gap-3">
                 <SalaryChart balancedata={DashboardState.data} />
                 <DataTable noticedata={DashboardState.data} />

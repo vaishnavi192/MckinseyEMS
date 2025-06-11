@@ -1,10 +1,21 @@
 import jwt from 'jsonwebtoken'
 
 export const VerifyEmployeeToken = (req, res, next) => {
-    const token = req.cookies.EMtoken
+    // Check for token in cookies first, then in Authorization header
+    let token = req.cookies.EMtoken
+    
+    if (!token) {
+        // Check Authorization header for Bearer token
+        const authHeader = req.headers.authorization
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            token = authHeader.substring(7) // Remove 'Bearer ' prefix
+        }
+    }
+    
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized access", gologin : true })
     }
+    
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET) 
         if (!decoded) {
@@ -16,7 +27,8 @@ export const VerifyEmployeeToken = (req, res, next) => {
         req.ORGID = decoded.ORGID
         next()
     } catch (error) {
-        return res.status(500).json({ success: false, message: "internal server error", error: error }) 
+        console.error('Token verification error:', error)
+        return res.status(500).json({ success: false, message: "internal server error", error: error.message }) 
     }
 }
 

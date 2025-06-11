@@ -1,6 +1,7 @@
 import { Department } from "../models/Department.model.js" 
 import { Employee } from "../models/Employee.model.js"
 import { Organization } from "../models/Organization.model.js"
+import { Slot } from "../models/Slot.model.js"
 
 export const HandleAllEmployees = async (req, res) => {
     try {
@@ -101,3 +102,117 @@ export const HandleEmployeeDelete = async (req, res) => {
         return res.status(500).json({ success: false, error: error, message: "internal server error" })
     }
 }
+
+// Get employee dashboard data (complete profile with statistics)
+export const getEmployeeDashboard = async (req, res) => {
+    try {
+        const employeeId = req.EMid;
+        
+        const employee = await Employee.findById(employeeId)
+            .populate('bookedSlots')
+            .populate('completedSlots')
+            .select('-password');
+        
+        if (!employee) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Employee not found" 
+            });
+        }
+
+        const dashboardData = {
+            name: employee.name,
+            designation: employee.designation,
+            jobType: employee.jobType,
+            facility: employee.facility,
+            dept: employee.dept,
+            numberOfHours: employee.numberOfHours,
+            totalEarnings: employee.totalEarnings,
+            earningsThisMonth: employee.earningsThisMonth,
+            totalNumberOfSlots: employee.totalNumberOfSlots,
+            slotsActive: employee.slotsActive,
+            totalShiftsDone: employee.totalShiftsDone,
+            shiftsThisMonth: employee.shiftsThisMonth,
+            totalOvertimeHours: employee.totalOvertimeHours,
+            totalTrainingHours: employee.totalTrainingHours,
+            totalContractualHours: employee.totalContractualHours,
+            bookedSlots: employee.bookedSlots,
+            completedSlots: employee.completedSlots
+        };
+
+        return res.json({ 
+            success: true, 
+            message: "Employee dashboard data fetched successfully", 
+            data: dashboardData 
+        });
+
+    } catch (error) {
+        return res.status(500).json({ 
+            success: false, 
+            message: "Internal Server Error", 
+            error: error.message 
+        });
+    }
+};
+
+// Get employee's booked slots
+export const getEmployeeBookedSlots = async (req, res) => {
+    try {
+        const employeeId = req.EMid;
+        
+        const employee = await Employee.findById(employeeId)
+            .populate('bookedSlots')
+            .select('bookedSlots');
+        
+        if (!employee) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Employee not found" 
+            });
+        }
+
+        return res.json({ 
+            success: true, 
+            message: "Booked slots fetched successfully", 
+            data: employee.bookedSlots 
+        });
+
+    } catch (error) {
+        return res.status(500).json({ 
+            success: false, 
+            message: "Internal Server Error", 
+            error: error.message 
+        });
+    }
+};
+
+// Get employee's completed slots
+export const getEmployeeCompletedSlots = async (req, res) => {
+    try {
+        const employeeId = req.EMid;
+        
+        const employee = await Employee.findById(employeeId)
+            .populate('completedSlots')
+            .select('completedSlots');
+        
+        if (!employee) {
+            return res.status(404).json({ 
+                success: false, 
+                message: "Employee not found" 
+            });
+        }
+
+        return res.json({ 
+            success: true, 
+            message: "Completed slots fetched successfully", 
+            data: employee.completedSlots 
+        });
+
+    } catch (error) {
+        return res.status(500).json({ 
+            success: false, 
+            message: "Internal Server Error", 
+            error: error.message 
+        });
+    }
+};

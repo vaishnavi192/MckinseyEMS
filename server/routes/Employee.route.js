@@ -1,5 +1,15 @@
 import express from "express"
-import { HandleAllEmployees, HandleEmployeeUpdate, HandleEmployeeDelete, HandleEmployeeByHR, HandleEmployeeByEmployee, HandleAllEmployeesIDS } from "../controllers/Employee.controller.js"
+import { 
+    HandleAllEmployees, 
+    HandleEmployeeUpdate, 
+    HandleEmployeeDelete, 
+    HandleEmployeeByHR, 
+    HandleEmployeeByEmployee, 
+    HandleAllEmployeesIDS,
+    getEmployeeDashboard,
+    getEmployeeBookedSlots,
+    getEmployeeCompletedSlots
+} from "../controllers/Employee.controller.js"
 import { VerifyhHRToken } from "../middlewares/Auth.middleware.js"
 import { RoleAuthorization } from "../middlewares/RoleAuth.middleware.js"
 import { VerifyEmployeeToken } from "../middlewares/Auth.middleware.js"
@@ -19,6 +29,9 @@ router.get("/by-HR/:employeeId", VerifyhHRToken, RoleAuthorization("HR-Admin"), 
 
 router.get("/by-employee", VerifyEmployeeToken, HandleEmployeeByEmployee)
 
-
+// New dashboard and slot-related routes for employees
+router.get("/dashboard", VerifyEmployeeToken, getEmployeeDashboard)
+router.get("/booked-slots", VerifyEmployeeToken, getEmployeeBookedSlots)
+router.get("/completed-slots", VerifyEmployeeToken, getEmployeeCompletedSlots)
 
 export default router
