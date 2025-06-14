@@ -1,1 +1,2 @@
-# MckinseyEMS
+# MckinseyEMS 
+Healthcare Employee Management System  
